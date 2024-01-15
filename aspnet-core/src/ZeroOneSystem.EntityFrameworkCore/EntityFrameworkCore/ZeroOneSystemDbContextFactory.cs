@@ -20,7 +20,7 @@ public class ZeroOneSystemDbContextFactory : IDesignTimeDbContextFactory<ZeroOne
         var configuration = BuildConfiguration();
 
         var builder = new DbContextOptionsBuilder<ZeroOneSystemDbContext>()
-            .UseNpgsql(configuration.GetConnectionString("Default"));
+            .UseSqlServer(configuration.GetConnectionString("Default"));
 
         return new ZeroOneSystemDbContext(builder.Options);
     }

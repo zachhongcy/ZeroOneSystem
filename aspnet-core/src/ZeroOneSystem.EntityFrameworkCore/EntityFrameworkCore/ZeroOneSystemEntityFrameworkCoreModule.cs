@@ -12,6 +12,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ZeroOneSystem.EntityFrameworkCore;
 
@@ -31,9 +32,6 @@ public class ZeroOneSystemEntityFrameworkCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
         ZeroOneSystemEfCoreEntityExtensionMappings.Configure();
     }
 
@@ -48,9 +46,19 @@ public class ZeroOneSystemEntityFrameworkCoreModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
-                /* The main point to change your DBMS.
-                 * See also ZeroOneSystemMigrationsDbContextFactory for EF Core tooling. */
-            options.UseNpgsql();
+            /* The main point to change your DBMS.
+             * See also ZeroOneSystemMigrationsDbContextFactory for EF Core tooling. */
+            options.Configure(ctx =>
+            {
+                if (ctx.ExistingConnection != null)
+                {
+                    ctx.DbContextOptions.UseSqlServer(ctx.ExistingConnection);
+                }
+                else
+                {
+                    ctx.DbContextOptions.UseSqlServer(ctx.ConnectionString);
+                }
+            });
         });
 
     }

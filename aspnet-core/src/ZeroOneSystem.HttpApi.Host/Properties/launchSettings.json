@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44356",
+      "applicationUrl": "https://zeroonesystem-api.azurewebsites.net",
       "sslPort": 44356
     }
   },
@@ -18,7 +18,7 @@
     "ZeroOneSystem.HttpApi.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44356",
+      "applicationUrl": "https://zeroonesystem-api.azurewebsites.net",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
