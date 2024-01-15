@@ -1,0 +1,112 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="display-1">
+            {{ '::ProductAdjustment:Edit' | abpLocalization }}
+        </h1>
+    </div>
+
+    <div class="card-body">
+        <form *ngIf="form" class="row g-2" [formGroup]="form" (ngSubmit)="save()">
+            <div class="col-md-2">
+                <label for="description" class="form-label">
+                    {{ '::ProductAdjustment:Description' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="description" class="form-control" formControlName="description" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="doc-no" class="form-label">
+                    {{ '::ProductAdjustment:DocumentNumber' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="doc-no" class="form-control" formControlName="documentNo" readonly />
+            </div>
+            
+            <div class="col-md-6"></div>
+            
+            <div class="col-md-2">
+                <label for="date" class="form-label">
+                    {{ '::ProductAdjustment:Date' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input
+                    #datepicker="ngbDatepicker"
+                    class="form-control"
+                    name="datepicker"
+                    formControlName="documentDate"
+                    ngbDatepicker (click)="datepicker.toggle()" />
+            </div>
+
+            <div class="col-12">
+                <ng-container formArrayName="productAdjustmentItems" >
+                    <mat-table class="auto-table" [dataSource]="productAdjustmentItems.controls">
+                        <ng-container [matColumnDef]="column.prop" *ngFor="let column of columns">
+                            <mat-header-cell *matHeaderCellDef>
+                                {{ column.name | abpLocalization }}
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                                <div [ngSwitch]="column.type">
+                                    <div *ngSwitchCase="'action'">
+                                        <button type="button" mat-icon-button (click)="addItem()">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                        <button type="button" mat-icon-button (click)="removeItem(index)" *ngIf="productAdjustmentItems.controls.length > 1">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                    <div *ngSwitchCase="'label'">
+                                        <span class="fs-5">{{ productAdjustmentItems.controls[index].value.subTotal }}</span>
+                                    </div>
+                                    <div *ngSwitchCase="'options'">
+                                        <select class="form-control" [id]="column.prop + '-' + index" [formControlName]="column.prop">
+                                            <option disabled [ngValue]="null">{{ '::Product:SelectUom' | abpLocalization }}</option>
+                                            <option [ngValue]="uom.value" *ngFor="let uom of uoms">
+                                                {{ '::Product:EnumUom.' + uom.value | abpLocalization }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <mat-form-field *ngSwitchCase="'number'">
+                                        <input type="number" matInput [formControlName]="column.prop" (blur)="calculateSubTotal(index)" />
+                                    </mat-form-field>
+                                    <mat-form-field *ngSwitchDefault>
+                                        <input [type]="column.type" matInput [formControlName]="column.prop" />
+                                    </mat-form-field>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </ng-container>
+            </div>
+
+            <div class="col-md-9"></div>
+
+            <div class="col-md-1">
+                <label for="total-cost" class="form-label fw-bold">
+                    {{ '::ProductAdjustment:Total' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" id="total-cost" class="form-control" formControlName="totalCost" readonly />
+            </div>
+
+            <div class="pt-2">
+                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/product-adjustments']">
+                    {{ '::Cancel' | abpLocalization }}
+                </button>
+                <button type="submit" class="btn btn-primary m-1 px-2">
+                    <i class="fa fa-check me-1"></i>
+                    {{ '::Save' | abpLocalization }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

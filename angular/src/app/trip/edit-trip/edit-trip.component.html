@@ -1,0 +1,206 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="display-1">
+            {{ '::Trip:Edit' | abpLocalization }}
+        </h1>
+    </div>
+
+    <div class="card-body">
+        <form *ngIf="form" class="row g-2" [formGroup]="form" (ngSubmit)="save()">
+            <div class="col-md-2">
+                <label for="trip-type" class="form-label">
+                    {{ '::Trip:Type' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="trip-type" formControlName="tripType">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectType' | abpLocalization }}</option>
+                    <option [ngValue]="tripType.value" *ngFor="let tripType of tripTypes">
+                        {{ '::Trip:EnumType.' + tripType.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label for="trip-no" class="form-label">
+                    {{ '::Trip:Number' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="trip-no" class="form-control" formControlName="tripNo" readonly />
+            </div>
+
+            <div class="col-md-2">
+                <label class=form-label>
+                    {{ '::Trip:Date' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input
+                    #datepicker="ngbDatepicker"
+                    class="form-control"
+                    name="trip-datepicker"
+                    formControlName="tripDate"
+                    ngbDatepicker (click)="datepicker.toggle()" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="status" class="form-label">
+                    {{ '::Trip:Status' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="status" formControlName="tripStatus">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectStatus' | abpLocalization }}</option>
+                    <option [ngValue]="tripStatus.value" *ngFor="let tripStatus of tripStatuses">
+                        {{ '::Trip:EnumStatus.' + tripStatus.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="customer-name" class="form-label">
+                    {{ '::Trip:CustomerName' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="customer-name" class="form-control" formControlName="customerName" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="refer-doc-no" class="form-label">
+                    {{ '::Trip:ReferDocNo' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="number" id="refer-doc-no" class="form-control" formControlName="referDocNo" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="priority" class="form-label">
+                    {{ '::Trip:Priority' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="priority" formControlName="priority">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectPriority' | abpLocalization }}</option>
+                    <option [ngValue]="tripPriority.value" *ngFor="let tripPriority of tripPriorities">
+                        {{ '::Trip:EnumPriority.' + tripPriority.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="driver" class="form-label">
+                    {{ '::Trip:Driver' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="driver" formControlName="driverId">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectDriver' | abpLocalization }}</option>
+                    <option [ngValue]="driver.id" *ngFor="let driver of drivers$ | async">
+                        {{ driver.driverName }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="vehicle" class="form-label">
+                    {{ '::Trip:Vehicle' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="vehicle" formControlName="vehicleId">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectVehicle' | abpLocalization }}</option>
+                    <option [ngValue]="vehicle.id" *ngFor="let vehicle of vehicles$ | async">
+                        {{ vehicle.vehiclePlate }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="remark" class="form-label">
+                    {{ '::Trip:Remark' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="remark" class="form-control" formControlName="remark" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="site-name" class="form-label">
+                    {{ '::Trip:SiteName' | abpLocalization }}
+                </label>
+                <span> * </span></div>
+            <div class="col-md-4">
+                <input type="text" id="site-name" class="form-control" formControlName="siteName" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="site-details" class="form-label">
+                    {{ '::Trip:SiteDetails' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="site-details" formControlName="siteDetail">
+                    <option disabled [ngValue]="null">{{ '::Trip:SelectSiteDetail' | abpLocalization }}</option>
+                    <option [ngValue]="siteDetail.value" *ngFor="let siteDetail of siteDetails">
+                        {{ '::Trip:EnumSiteDetail.' + siteDetail.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="site-address" class="form-label">
+                    {{ '::Trip:SiteAddress' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="site-address" class="form-control" formControlName="siteAddress" />
+            </div>
+
+            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
+
+            <div class="col-md-2">
+                <label for="contact-person" class="form-label">
+                    {{ '::Trip:ContactPerson' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="contact-person" class="form-control" formControlName="contactPerson" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="contact-no" class="form-label">
+                    {{ '::Trip:ContactNumber' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="contact-no" class="form-control" formControlName="contactNo" />
+            </div>
+            
+            <div class="pt-2">
+                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/trips']">
+                    {{ '::Cancel' | abpLocalization }}
+                </button>
+                <button type="submit" class="btn btn-primary m-1 px-2">
+                    <i class="fa fa-check me-1"></i>
+                    {{ '::Save' | abpLocalization }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
