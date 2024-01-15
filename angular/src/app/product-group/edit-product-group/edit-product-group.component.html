@@ -1,0 +1,87 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="display-1">
+            {{ '::ProductGroup:Edit' | abpLocalization }}
+        </h1>
+    </div>
+
+    <div class="card-body">
+        <form *ngIf="form" [formGroup]="form" (ngSubmit)="save()">
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="name" class="form-label">
+                        {{ '::ProductGroup:Name' | abpLocalization }}
+                    </label>
+                    <span> * </span>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" id="name" class="form-control" formControlName="name" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="short-code" class="form-label">
+                        {{ '::ProductGroup:ShortCode' | abpLocalization }}
+                    </label>
+                    <span> * </span>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" id="short-code" class="form-control" formControlName="shortCode" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="description" class="form-label">
+                        {{ '::ProductGroup:Description' | abpLocalization }}
+                    </label>
+                    <span> * </span>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" id="description" class="form-control" formControlName="description" />
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="status" class="form-label">
+                        {{ '::ProductGroup:Status' | abpLocalization }}
+                    </label>
+                    <span> * </span>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control" id="status" formControlName="status">
+                        <option disabled [ngValue]="null">
+                            {{ '::ProductGroup:SelectStatus' | abpLocalization }}
+                        </option>
+                        <option [ngValue]="status.value" *ngFor="let status of statuses">
+                            {{ '::ProductGroup:EnumStatus.' + status.value | abpLocalization }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-10 offset-sm-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="is-for-sales" formControlName="isForSales">
+                        <label for="is-for-sales" class="form-check-label">
+                            {{ '::ProductGroup:IsForSales' | abpLocalization }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-2">
+                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/product-groups']">
+                    {{ '::Cancel' | abpLocalization }}
+                </button>
+                <button type="submit" class="btn btn-primary m-1 px-2">
+                    <i class="fa fa-check me-1"></i>
+                    {{ '::Save' | abpLocalization }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

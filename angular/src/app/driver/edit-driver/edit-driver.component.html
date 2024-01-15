@@ -1,0 +1,172 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="display-1">
+            {{ '::Driver:Edit' | abpLocalization }}
+        </h1>
+    </div>
+
+    <div class="card-body">
+        <form *ngIf="form" class="row g-2" [formGroup]="form" (ngSubmit)="save()">
+            <div class="col-md-2">
+                <label for="driver-no" class="form-label">
+                    {{ '::Driver:Number' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="driver-no" class="form-control" formControlName="driverNo" readonly />
+            </div>
+
+            <div class="col-md-2">
+                <label for="picture" class="form-label">
+                    {{ '::Driver:Picture' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="file" 
+                    id="picture" 
+                    class="form-control" 
+                    formControlName="image" 
+                    (change)="addImageToForm($event)" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="name" class="form-label">
+                    {{ '::Driver:Name' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="name" class="form-control" formControlName="driverName" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="license-no" class="form-label">
+                    {{ '::Driver:LicenseNo' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="license-no" class="form-control" formControlName="licenseNo" />
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">
+                    {{ '::Driver:LicenseExpiryDate' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input
+                    #datepicker="ngbDatepicker"
+                    class="form-control"
+                    name="license-expiry-datepicker"
+                    formControlName="licenseExpiryDate"
+                    ngbDatepicker (click)="datepicker.toggle()" />
+                </div>
+            
+            <div class="col-md-2">
+                <label for="contact-no" class="form-label">
+                    {{ '::Driver:ContactNo' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="contact-no" class="form-control" formControlName="contactNo" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="employee-category" class="form-label">
+                    {{ '::Driver:EmployeeCategory' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="number" id="employee-category" class="form-control" formControlName="employeeCategory" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="password" class="form-label">
+                    {{ '::Driver:Password' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="password" class="form-control" formControlName="password" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="status" class="form-label">
+                    {{ '::Driver:Status' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="status" formControlName="status">
+                    <option disabled [ngValue]="null">{{ '::Driver:SelectStatus' | abpLocalization }}</option>
+                    <option [ngValue]="status.value" *ngFor="let status of statuses">
+                        {{ '::Driver:EnumStatus.' + status.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label for="remark" class="form-label">
+                    {{ '::Driver:Remark' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="remark" class="form-control" formControlName="remark" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="emergency-contact-name" class="form-label">
+                    {{ '::Driver:EmergencyContactName' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="emergency-contact-name" class="form-control" formControlName="emergencyContactName" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="relationship" class="form-label">
+                    {{ '::Driver:Relationship' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="relationship" class="form-control" formControlName="emergencyRelationship" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="emergency-contact-no" class="form-label">
+                    {{ '::Driver:EmergencyContactNo' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="emergency-contact-no" class="form-control" formControlName="emergencyContactNo" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="address" class="form-label">
+                    {{ '::Driver:Address' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="address" class="form-control" formControlName="address" />
+            </div>
+            
+            <div class="pt-2">
+                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/drivers']">
+                    {{ '::Cancel' | abpLocalization }}
+                </button>
+                <button type="submit" class="btn btn-primary m-1 px-2">
+                    <i class="fa fa-check me-1"></i>
+                    {{ '::Save' | abpLocalization }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

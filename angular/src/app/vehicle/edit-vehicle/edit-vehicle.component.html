@@ -1,0 +1,119 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="display-1">
+            {{ '::Vehicle:Edit' | abpLocalization }}
+        </h1>
+    </div>
+
+    <div class="card-body">
+        <form *ngIf="form" class="row g-2" [formGroup]="form" (ngSubmit)="save()">
+            <div class="col-md-2">
+                <label for="vehicle-type" class="form-label">
+                    {{ '::Vehicle:Type' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="vehicle-type" formControlName="vehicleType">
+                    <option disabled [ngValue]="null">{{ '::Vehicle:SelectType' | abpLocalization }}</option>
+                    <option [ngValue]="vehicleType.value" *ngFor="let vehicleType of vehicleTypes">
+                        {{ '::Vehicle:EnumType.' + vehicleType.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label for="picture" class="form-label">
+                    {{ '::Vehicle:Picture' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="file" id="picture" class="form-control" formControlName="image" (change)="addImageToForm($event)" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="vehicle-plate" class="form-label">
+                    {{ '::Vehicle:Plate' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="vehicle-plate" class="form-control" formControlName="vehiclePlate" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="vehicle-model" class="form-label">
+                    {{ '::Vehicle:Model' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="vehicle-model" class="form-control" formControlName="vehicleModel" />
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">
+                    {{ '::Vehicle:RoadTaxExpiryDate' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input
+                    #roadTaxDatePicker="ngbDatepicker"
+                    class="form-control"
+                    name="road-tax-expiry-datepicker"
+                    formControlName="roadTaxExpiryDate"
+                    ngbDatepicker (click)="roadTaxDatePicker.toggle()" />
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">
+                    {{ '::Vehicle:ServiceDate' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <input
+                    #serviceDatePicker="ngbDatepicker"
+                    class="form-control"
+                    name="service-datepicker"
+                    formControlName="serviceDate"
+                    ngbDatepicker (click)="serviceDatePicker.toggle()" />
+            </div>
+            
+            <div class="col-md-2">
+                <label for="status" class="form-label">
+                    {{ '::Vehicle:Status' | abpLocalization }}
+                </label>
+                <span> * </span>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="status" formControlName="status">
+                    <option disabled [ngValue]="null">{{ '::Vehicle:SelectStatus' | abpLocalization }}</option>
+                    <option [ngValue]="status.value" *ngFor="let status of statuses">
+                        {{ '::Vehicle:EnumStatus.' + status.value | abpLocalization }}
+                    </option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label for="remark" class="form-label">
+                    {{ '::Vehicle:Remark' | abpLocalization }}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="remark" class="form-control" formControlName="remark" />
+            </div>
+
+            <div class="pt-2">
+                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/vehicles']">
+                    {{ '::Cancel' | abpLocalization }}
+                </button>
+                <button type="submit" class="btn btn-primary m-1 px-2">
+                    <i class="fa fa-check me-1"></i>
+                    {{ '::Save' | abpLocalization }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

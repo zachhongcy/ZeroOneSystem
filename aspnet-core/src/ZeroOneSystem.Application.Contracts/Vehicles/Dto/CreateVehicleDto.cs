@@ -1,0 +1,20 @@
+﻿using System;
+using Volo.Abp.Content;
+using ZeroOneSystem.Enums.Common;
+using ZeroOneSystem.Enums.Vehicles;
+
+namespace ZeroOneSystem.Vehicles.Dto
+{
+    [Serializable]
+    public class CreateVehicleDto
+    {
+        public VehicleType VehicleType { get; set; }
+        public IRemoteStreamContent? Image { get; set; }
+        public string VehiclePlate { get; set; }
+        public string VehicleModel { get; set; }
+        public DateTime RoadTaxExpiryDate { get; set; }
+        public DateTime ServiceDate { get; set; }
+        public Status Status { get; set; }
+        public string? Remark { get; set; }
+    }
+}

@@ -1,0 +1,41 @@
+<ng-container [ngSwitch]="template">
+    <div *ngSwitchCase="cellTemplate.Image">
+        <button class="btn btn-link p-0 m-0 d-inline align-baseline" 
+            type="button" 
+            (click)="openImage(value)">
+            <span class="fs-5 text">{{ '::ViewPicture' | abpLocalization }}</span>
+        </button>
+    </div>
+    <div *ngSwitchCase="cellTemplate.DateTime">
+        {{ value | shortDateTime }}
+    </div>
+    <div *ngSwitchCase="cellTemplate.Date">
+        {{ value | shortDate }}
+    </div>
+    <div *ngSwitchCase="cellTemplate.YesNo">
+        <span *ngIf="value">{{ '::Yes' | abpLocalization }}</span>
+        <span *ngIf="!value">{{ '::No' | abpLocalization }}</span>
+    </div>
+    <div *ngSwitchCase="cellTemplate.Enum">
+        {{ enumName + value | abpLocalization }}
+    </div>
+    <div *ngSwitchCase="cellTemplate.Price">
+        {{ "RM" + value }}
+    </div>
+    <span class="cell-multiline" *ngSwitchCase="cellTemplate.Multiline">
+        {{ value }}
+    </span>
+    <div *ngSwitchDefault>
+        {{ value }}
+    </div>
+</ng-container>
+
+<abp-modal #imageModal [(visible)]="isImageModalOpen" [options]="{size: 'xl', keyboard: true}">
+    <ng-template #abpHeader>
+    </ng-template>
+    <ng-template #abpBody>
+      <div class="image-container">
+        <img class="img-fluid" [src]="openedImageSrc">
+      </div>
+    </ng-template>
+</abp-modal>

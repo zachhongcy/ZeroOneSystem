@@ -1,0 +1,83 @@
+<div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col col-md-6">
+          <h5 class="display-1 card-title">
+            {{ '::Menu:Trips' | abpLocalization }}
+          </h5>
+        </div>
+        <div class="text-end col col-md-6">
+            <div class="text-lg-end pt-2">
+                <button id="create" class="btn btn-primary m-1 px-2" type="button" [routerLink]="['create']">
+                    <i class="fa fa-plus me-1"></i>
+                    <span class="fs-5">{{ "::Create" | abpLocalization }}</span>
+                </button>
+                <button id="export" class="btn btn-primary m-1 px-2" type="button" (click)="export()">
+                    <i class="fa fa-file-excel-o me-1"></i>
+                    <span class="fs-5">{{ "::Export" | abpLocalization }}</span>
+                </button>
+                <button id="column-setting" class="btn btn-primary m-1 px-2" type="button" (click)="setColumnsVisibility()">
+                  <i class="fa fa-cog"></i>
+                  <span class="fs-5">{{ '::ShowHideColumns' | abpLocalization }}</span>
+                </button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <ngx-datatable [rows]="trips.items" [count]="trips.totalCount" [list]="list" default>
+        <ngx-datatable-column
+          [name]="'::Actions' | abpLocalization"
+          [width]="100"
+          [maxWidth]="100"
+          [sortable]="false"
+          [frozenLeft]="true">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <button 
+              mat-icon-button
+              [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item [routerLink]="['edit', row.id]">
+                {{ '::Edit' | abpLocalization }}
+              </button>
+              <button mat-menu-item (click)="delete(row.id)">
+                {{ '::Delete' | abpLocalization }}
+              </button>
+            </mat-menu>
+          </ng-template>
+        </ngx-datatable-column>
+        <ng-container *ngFor="let column of columns">
+          <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <app-datatable-cell 
+                [template]="column.template" 
+                [value]="value"
+                [enumName]="column.enumName"></app-datatable-cell>
+            </ng-template>
+          </ngx-datatable-column>
+        </ng-container>
+      </ngx-datatable>
+    </div>
+</div>
+
+<abp-modal #columnVisibilityModal [(visible)]="isColumnVisibilityModalOpen" [suppressUnsavedChangesWarning]="true">
+  <ng-template #abpHeader>
+    <h1 class="display-1">{{ '::ShowHideColumns' | abpLocalization }}</h1>
+  </ng-template>
+  
+  <ng-template #abpBody>
+    <div class="form-check" *ngFor="let column of columns">
+      <input class="form-check-input" type="checkbox" [id]="'check-' + column.prop + '-visbility'" [(ngModel)]="column.visible">
+      <label class="form-check-label" [for]="'check-' + column.prop + '-visbility'">
+        {{ column.name | abpLocalization }}
+      </label>
+    </div>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-light m-1 px-2" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+  </ng-template>
