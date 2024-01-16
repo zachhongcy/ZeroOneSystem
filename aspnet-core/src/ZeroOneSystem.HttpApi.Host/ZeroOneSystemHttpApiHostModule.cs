@@ -29,6 +29,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.OpenIddict;
 
 namespace ZeroOneSystem;
 
@@ -56,6 +57,21 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
                 options.UseAspNetCore();
             });
         });
+
+        var env = context.Services.GetHostingEnvironment();
+        if (!env.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            {
+                var certPath = Path.Combine(Directory.GetCurrentDirectory(), "apihost/authserver.pfx");
+                serverBuilder.AddProductionEncryptionAndSigningCertificate(certPath, "245E6005-BF16-4114-B9A0-10EF1391933D");
+            });
+        }
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
