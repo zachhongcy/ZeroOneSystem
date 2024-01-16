@@ -85,7 +85,10 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
         ConfigureConventionalControllers();
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
-        ConfigureSwaggerServices(context, configuration);
+        if (hostingEnvironment.IsDevelopment())
+        {
+            ConfigureSwaggerServices(context, configuration);
+        }
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
