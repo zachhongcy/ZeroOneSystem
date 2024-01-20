@@ -3,9 +3,9 @@
 
 
 "@abp/aspnetcore.mvc.ui.theme.leptonxlite@~3.0.0-rc.1":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.leptonxlite/-/aspnetcore.mvc.ui.theme.leptonxlite-3.0.0.tgz#311e9d9be628900fcdd8daf58d98e42dcf9d9e8a"
-  integrity sha512-OrM3o2HgFsw1R/Edq1/kS20JZ9VQ7qm8ge14Kd3kfo9uk6dS9D7XC45ZUfCQUquFqTNHyoOQYfHtra/7Z3U3QQ==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.leptonxlite/-/aspnetcore.mvc.ui.theme.leptonxlite-3.0.2.tgz#69de3a853e6de03190f015c9a8caeef99f63ea9c"
+  integrity sha512-ICq+VZruWNqhAKp2nIj9MLKj4KK3aYsQj9/NNvyoWUYfogUcbHhxIrdO6/0WxjaoMFIpOtv+K3aj49ovyCjaXA==
   dependencies:
     "@abp/aspnetcore.mvc.ui.theme.shared" "~7.2.1"
 
@@ -1133,7 +1133,7 @@ gulplog@^1.0.0:
   dependencies:
     glogg "^1.0.0"
 
-has-property-descriptors@^1.0.0:
+has-property-descriptors@^1.0.0, has-property-descriptors@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/has-property-descriptors/-/has-property-descriptors-1.0.1.tgz#52ba30b6c5ec87fd89fa574bc1c39125c6f65340"
   integrity sha512-VsX8eaIewvas0xnvinAe9bw4WfIeODpGYikiWYLH+dma0Jw6KHYqWiWfhQlgOVK8D6PvjubK5Uc4P0iIhIcNVg==
@@ -2107,14 +2107,15 @@ set-blocking@^2.0.0:
   integrity sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==
 
 set-function-length@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/set-function-length/-/set-function-length-1.1.1.tgz#4bc39fafb0307224a33e106a7d35ca1218d659ed"
-  integrity sha512-VoaqjbBJKiWtg4yRcKBQ7g7wnGnLV3M8oLvVWwOk2PdYY6PEFegR1vezXR0tw6fZGF9csVakIRjrJiy2veSBFQ==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/set-function-length/-/set-function-length-1.2.0.tgz#2f81dc6c16c7059bda5ab7c82c11f03a515ed8e1"
+  integrity sha512-4DBHDoyHlM1IRPGYcoxexgh67y4ueR53FKV1yyxwFMY7aCqcN/38M1+SwZ/qJQ8iLv7+ck385ot4CcisOAPT9w==
   dependencies:
     define-data-property "^1.1.1"
-    get-intrinsic "^1.2.1"
+    function-bind "^1.1.2"
+    get-intrinsic "^1.2.2"
     gopd "^1.0.1"
-    has-property-descriptors "^1.0.0"
+    has-property-descriptors "^1.0.1"
 
 set-value@^2.0.0, set-value@^2.0.1:
   version "2.0.1"
@@ -2234,9 +2235,9 @@ stream-exhaust@^1.0.1:
   integrity sha512-b/qaq/GlBK5xaq1yrK9/zFcyRSTNxmcZwFLGSTG0mXgZl/4Z6GgiyYOXOvY7N3eEvFRAG1bkDRz5EPGSvPYQlw==
 
 stream-shift@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.1.tgz#d7088281559ab2778424279b0877da3c392d5a3d"
-  integrity sha512-AiisoFqQ0vbGcZgQPY1cdP2I76glaVA/RauYR4G4thNFgkTqr90yXTo4LYX60Jl+sIlPNHHdGSwo01AvbKUSVQ==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.3.tgz#85b8fab4d71010fc3ba8772e8046cc49b8a3864b"
+  integrity sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==
 
 string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"
@@ -2282,9 +2283,9 @@ sver-compat@^1.5.0:
     es6-symbol "^3.1.1"
 
 sweetalert2@^11.3.6:
-  version "11.10.2"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.10.2.tgz#084fba88028e7ab5667ceed00e4201dda7d25294"
-  integrity sha512-BYlIxGw6OF9Rw2z1wlnh1U+fvHHkvtg4BGyimV9nZxQRGvCBfx9uonxgwuYpJuYqCtM+2W1KOm8iMIEb/2v7Hg==
+  version "11.10.3"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.10.3.tgz#4e21a0c021404c8a1e00f54821092a8488aae04e"
+  integrity sha512-mZYtQR7v+khyEruq0SsVUa6XIdI9Aue8s2XAIpAwdlLN1T0w7mxKEjyubiBZ3/bLbHC/wGS4wNABvXWubCizvA==
 
 through2-filter@^3.0.0:
   version "3.0.0"

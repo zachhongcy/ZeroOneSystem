@@ -19,6 +19,12 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
+      - name: Install ABP cli
+        run: dotnet tool install -g Volo.Abp.Cli
+
+      - name: Install ABP libs
+        run: abp install-libs
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
         working-directory: ./aspnet-core
