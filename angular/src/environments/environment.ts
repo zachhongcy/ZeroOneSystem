@@ -1,6 +1,6 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'https://ambitious-plant-0200c8700.4.azurestaticapps.net';
+const baseUrl = 'http://localhost:4200';
 
 export const environment = {
   production: false,
@@ -10,7 +10,7 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://zeroonesystem-api.azurewebsites.net/',
+    issuer: 'https://localhost:44356/',
     redirectUri: baseUrl,
     clientId: 'ZeroOneSystem_App',
     responseType: 'code',
@@ -19,7 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://zeroonesystem-api.azurewebsites.net',
+      url: 'https://localhost:44356',
       rootNamespace: 'ZeroOneSystem',
     },
   },

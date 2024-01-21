@@ -24,6 +24,7 @@ jobs:
 
       - name: Install ABP libs
         run: abp install-libs
+        working-directory: ./aspnet-core/src
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
