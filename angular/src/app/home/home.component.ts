@@ -12,9 +12,6 @@ export class HomeComponent {
   }
 
   constructor(private authService: AuthService) {
-    if (!this.hasLoggedIn) {
-      this.authService.navigateToLogin();
-    }
   }
 
   login() {
