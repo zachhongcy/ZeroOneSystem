@@ -262,4 +262,4 @@ src/ZeroOneSystem.Blazor.Server/Logs/*
 src/ZeroOneSystem.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
-# **/wwwroot/libs/*
+**/wwwroot/libs/*
