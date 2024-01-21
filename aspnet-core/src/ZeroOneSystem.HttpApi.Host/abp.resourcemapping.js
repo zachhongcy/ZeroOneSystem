@@ -4,8 +4,6 @@ module.exports = {
         "@libs": "./wwwroot/libs"
     },
     clean: [
-        "@libs",
-        "!@libs/**/foo.txt"
     ],
     mappings: {
 

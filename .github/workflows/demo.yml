@@ -24,7 +24,7 @@ jobs:
 
       - name: Install ABP libs
         run: abp install-libs
-        working-directory: ./aspnet-core/src
+        working-directory: ./aspnet-core/src/ZeroOneSystem.HttpApi.Host
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
