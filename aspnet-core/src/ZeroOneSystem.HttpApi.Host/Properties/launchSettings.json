@@ -13,14 +13,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:44356"
+      "applicationUrl": "https://zeroonesystem-api.azurewebsites.net"
     }
   },
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44356",
+      "applicationUrl": "https://zeroonesystem-api.azurewebsites.net",
       "sslPort": 44356
     }
   }
