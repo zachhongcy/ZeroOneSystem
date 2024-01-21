@@ -4,7 +4,7 @@ This is a startup project based on the ABP framework. For more information, visi
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `https://ambitious-plant-0200c8700.4.azurestaticapps.net/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

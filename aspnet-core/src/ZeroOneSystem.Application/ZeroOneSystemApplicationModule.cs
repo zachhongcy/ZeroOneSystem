@@ -10,6 +10,7 @@ using Volo.Abp.BlobStoring.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BlobStoring;
 using ZeroOneSystem.Common;
+using Volo.Abp;
 
 namespace ZeroOneSystem;
 
@@ -24,10 +25,16 @@ namespace ZeroOneSystem;
     typeof(AbpSettingManagementApplicationModule)
     )]
 [DependsOn(typeof(AbpBlobStoringFileSystemModule))]
-    public class ZeroOneSystemApplicationModule : AbpModule
+public class ZeroOneSystemApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetAbpHostEnvironment();
+
+        var basePath = hostingEnvironment.IsDevelopment()
+            ? "C:\\ZeroOneSystem"
+            : "/images";
+
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<ZeroOneSystemApplicationModule>();
@@ -41,7 +48,7 @@ namespace ZeroOneSystem;
             {
                 container.UseFileSystem(fs =>
                 {
-                    fs.BasePath = "C:\\ZeroOneSystem";
+                    fs.BasePath = basePath;
                 });
             });
         });
