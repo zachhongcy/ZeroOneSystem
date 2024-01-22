@@ -23,8 +23,8 @@ export const environment = {
       rootNamespace: 'ZeroOneSystem',
     },
   }, 
-  remoteEnv: {
-    url: '/getEnvConfig',
-    mergeStrategy: 'deepmerge'
-  },
+  // remoteEnv: {
+  //   url: '/getEnvConfig',
+  //   mergeStrategy: 'deepmerge'
+  // },
 } as Environment;
