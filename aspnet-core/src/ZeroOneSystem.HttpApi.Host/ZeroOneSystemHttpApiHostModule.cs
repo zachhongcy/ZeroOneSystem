@@ -84,10 +84,7 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
         ConfigureConventionalControllers();
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
-        if (hostingEnvironment.IsDevelopment())
-        {
-            ConfigureSwaggerServices(context, configuration);
-        }
+        ConfigureSwaggerServices(context, configuration);
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -225,18 +222,15 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
         app.UseDynamicClaims();
         app.UseAuthorization();
 
-        if (env.IsDevelopment())
+        app.UseSwagger();
+        app.UseAbpSwaggerUI(c =>
         {
-            app.UseSwagger();
-            app.UseAbpSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZeroOneSystem API");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZeroOneSystem API");
 
-                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-                c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                c.OAuthScopes("ZeroOneSystem");
-            });
-        }
+            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+            c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            c.OAuthScopes("ZeroOneSystem");
+        });
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
