@@ -28,14 +28,14 @@ namespace ZeroOneSystem.Products
     public class ProductAppService : ApplicationService, IProductAppService
     {
         private readonly IGuidGenerator _guidGenerator;
-        private readonly IRepository<Product, Guid> _productRepository;
-        private readonly IRepository<ProductGroup, Guid> _productGroupRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IProductGroupRepository _productGroupRepository;
         private readonly IFileService<ProductImageContainer> _fileService;
 
         public ProductAppService(
             IGuidGenerator guidGenerator,
-            IRepository<Product, Guid> productRepository,
-            IRepository<ProductGroup, Guid> productGroupRepository,
+            IProductRepository productRepository,
+            IProductGroupRepository productGroupRepository,
             IFileService<ProductImageContainer> fileService)
         {
             _guidGenerator = guidGenerator;
@@ -45,7 +45,7 @@ namespace ZeroOneSystem.Products
             LocalizationResource = typeof(ZeroOneSystemResource);
         }
 
-        public async Task CreateAsync([FromForm] CreateProductDto input)
+        public async Task CreateAsync(CreateProductDto input)
         {
             var isDuplicate = await _productRepository.AnyAsync(x => x.Code == input.Code);
 
@@ -56,9 +56,9 @@ namespace ZeroOneSystem.Products
 
             var imageFileName = string.Empty;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
+                imageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
             }
 
             var product = Product.Create(
@@ -114,12 +114,11 @@ namespace ZeroOneSystem.Products
 
             var productDtos = ObjectMapper.Map<List<Product>, List<ProductDto>>(products);
 
-            await Task.WhenAll(productDtos.Select(async x =>
+            productDtos.ForEach(x =>
             {
-                x.ImageContent = await _fileService.GetBase64ContentAsync(x.ImageFileName);
                 x.ProductQuantities = x.GetProductQuantities();
                 x.ProductGroupCodeName = productGroupDictionary[x.ProductGroupId].GetProductGroupCodeName();
-            }));
+            });
 
             return new PagedResultDto<ProductDto>
             {
@@ -137,16 +136,22 @@ namespace ZeroOneSystem.Products
             var product = await AsyncExecuter.FirstOrDefaultAsync(query)
                 ?? throw new EntityNotFoundException(typeof(Product), id);
 
-            var productGroup = await _productGroupRepository.GetAsync(product.ProductGroupId);
-
             var productDto = ObjectMapper.Map<Product, ProductDto>(product);
 
-            productDto.ProductGroupCodeName = productGroup.GetProductGroupCodeName();
+            try
+            {
+                var productGroup = await _productGroupRepository.GetAsync(product.ProductGroupId);
+                productDto.ProductGroupCodeName = productGroup.GetProductGroupCodeName();
+            }
+            catch (EntityNotFoundException)
+            {
+                productDto.ProductGroupCodeName = string.Empty;
+            }
 
             return productDto;
         }
 
-        public async Task UpdateAsync(Guid id, [FromForm] UpdateProductDto input)
+        public async Task UpdateAsync(Guid id, UpdateProductDto input)
         {
             var queryable = await _productRepository.WithDetailsAsync(x => x.ProductSize, x => x.ProductPrice);
 
@@ -157,9 +162,9 @@ namespace ZeroOneSystem.Products
 
             var imageFileName = product.ImageFileName;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
+                imageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
 
                 if (!product.ImageFileName.IsNullOrEmpty())
                 {
@@ -254,6 +259,8 @@ namespace ZeroOneSystem.Products
                     ]
                 ];
 
+                worksheet.Cell(1, 1).InsertData(columnNames);
+
                 var productGroupDictionary = await GetProductGroupDictionaryAsync(products);
 
                 var productsToExport = products.AsEnumerable().Select(x => new
@@ -279,7 +286,7 @@ namespace ZeroOneSystem.Products
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.PRODUCTS_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
         }
@@ -298,6 +305,14 @@ namespace ZeroOneSystem.Products
             });
 
             return new ListResultDto<ProductGroupLookupDto>(productGroupDtos);
+        }
+
+        [HttpGet]
+        public async Task<string> GetImageContentAsync(Guid id)
+        {
+            var product = await _productRepository.GetAsync(id);
+
+            return await _fileService.GetBase64ContentAsync(product.ImageFileName);
         }
 
         private async Task<Dictionary<Guid, ProductGroup>> GetProductGroupDictionaryAsync(List<Product> products)

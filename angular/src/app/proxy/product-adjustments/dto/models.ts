@@ -1,4 +1,4 @@
-import type { CreationAuditedEntityDto } from '@abp/ng.core';
+import type { CreationAuditedEntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
 import type { Uom } from '../../enums/products/uom.enum';
 
 export interface CreateProductAdjustmentDto {
@@ -32,4 +32,8 @@ export interface UpdateProductAdjustmentDto {
   description?: string;
   totalCost: number;
   productAdjustmentItems: ProductAdjustmentItemDto[];
+}
+
+export interface GetProductGroupsDto extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

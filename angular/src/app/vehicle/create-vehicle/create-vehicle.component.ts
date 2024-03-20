@@ -1,4 +1,3 @@
-import { Rest, RestService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -6,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { statusOptions } from '@proxy/enums/common';
 import { vehicleTypeOptions } from '@proxy/enums/vehicles';
+import { VehicleService } from '@proxy/vehicles';
 
 @Component({
   selector: 'app-create-vehicle',
@@ -16,18 +16,20 @@ import { vehicleTypeOptions } from '@proxy/enums/vehicles';
 export class CreateVehicleComponent {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
-  private readonly restService = inject(RestService);
+  private readonly vehicleService = inject(VehicleService);
   private readonly toasterService = inject(ToasterService);
 
   form: FormGroup;
   image: File;
   statuses = statusOptions;
   vehicleTypes = vehicleTypeOptions;
+  imageUrl: string | ArrayBuffer | null = null;
 
   private buildForm(): void {
     this.form = this.fb.group({
       vehicleType: [null, Validators.required],
-      image: [''],
+      imageName: [''],
+      imageContent: [''],
       vehiclePlate: ['', Validators.required],
       vehicleModel: ['', Validators.required],
       roadTaxExpiryDate: [null, Validators.required],
@@ -46,18 +48,7 @@ export class CreateVehicleComponent {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append('vehicleType', this.form.value.vehicleType);
-    formData.append('image', this.image);
-    formData.append('vehiclePlate', this.form.value.vehiclePlate);
-    formData.append('vehicleModel', this.form.value.vehicleModel);
-    formData.append('roadTaxExpiryDate', (new Date(this.form.value.roadTaxExpiryDate)).toDateString());
-    formData.append('serviceDate', (new Date(this.form.value.serviceDate)).toDateString());
-    formData.append('status', this.form.value.status);
-    formData.append('remark', this.form.value.remark);
-
-    this.createVehicle(formData).subscribe(() => {
+    this.vehicleService.create(this.form.value).subscribe(() => {
       this.toasterService.success('::Vehicle:CreateSuccess');
       this.router.navigate(['/vehicles']);
     })
@@ -70,14 +61,14 @@ export class CreateVehicleComponent {
       return;
     }
     
-    this.image = files[0];
+    const image = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+      this.form.get('imageName').setValue(image.name);
+      const imageUrlString = reader.result as string;
+      this.form.get('imageContent').setValue(imageUrlString.split(',')[1]);
+    }
   }
-
-  private createVehicle = (formData: FormData, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'POST',
-      url: '/api/app/vehicle',
-      body: formData,
-    },
-    { apiName: 'Default',...config });
 }

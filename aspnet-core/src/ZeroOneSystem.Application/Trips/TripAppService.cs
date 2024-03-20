@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,15 +26,15 @@ namespace ZeroOneSystem.Trips
 {
     public class TripAppService : BaseAppService, ITripAppService
     {
-        private readonly IRepository<Trip, Guid> _tripRepository;
-        private readonly IRepository<Driver, Guid> _driverRepository;
-        private readonly IRepository<Vehicle, Guid> _vehicleRepository;
+        private readonly ITripRepository _tripRepository;
+        private readonly IDriverRepository _driverRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
         public TripAppService(
             IGuidGenerator guidGenerator,
-            IRepository<Trip, Guid> tripRepository,
-            IRepository<Driver, Guid> driverRepository,
-            IRepository<Vehicle, Guid> vehicleRepository)
+            ITripRepository tripRepository,
+            IDriverRepository driverRepository,
+            IVehicleRepository vehicleRepository)
             : base (guidGenerator)
         {
             _tripRepository = tripRepository;
@@ -92,8 +93,8 @@ namespace ZeroOneSystem.Trips
             tripDtos.ForEach(x =>
             {
                 x.SiteDetails = x.GetTripSiteDetails();
-                x.DriverName = driverDictionary[x.DriverId].DriverName;
-                x.VehiclePlate = vehicleDictionary[x.VehicleId].VehiclePlate;
+                x.DriverName = driverDictionary.TryGetValue(x.DriverId, out Driver? driver) ? driver.DriverName : string.Empty; 
+                x.VehiclePlate = vehicleDictionary.TryGetValue(x.VehicleId, out Vehicle? vehicle) ? vehicle.VehiclePlate : string.Empty;
             });
 
             return new PagedResultDto<TripDto>
@@ -108,13 +109,27 @@ namespace ZeroOneSystem.Trips
             var trip = await _tripRepository.GetAsync(id)
                 ?? throw new EntityNotFoundException(typeof(Trip), id);
 
-            var driver = await _driverRepository.GetAsync(trip.DriverId);
-
-            var vehicle = await _vehicleRepository.GetAsync(trip.VehicleId);
-
             var tripDto = ObjectMapper.Map<Trip, TripDto>(trip);
-            tripDto.DriverName = driver.DriverName;
-            tripDto.VehiclePlate = vehicle.VehiclePlate;
+
+            try
+            {
+                var driver = await _driverRepository.GetAsync(trip.DriverId);
+                tripDto.DriverName = driver.DriverName;
+            }
+            catch (EntityNotFoundException)
+            {
+                tripDto.DriverName = string.Empty;
+            }
+
+            try
+            {
+                var vehicle = await _vehicleRepository.GetAsync(trip.VehicleId);
+                tripDto.VehiclePlate = vehicle.VehiclePlate;
+            }
+            catch (EntityNotFoundException)
+            {
+                tripDto.VehiclePlate = string.Empty;
+            }
 
             return tripDto;
         }
@@ -219,7 +234,7 @@ namespace ZeroOneSystem.Trips
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.TRIPS_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
         }
@@ -238,7 +253,7 @@ namespace ZeroOneSystem.Trips
             return new ListResultDto<VehicleLookupDto>(ObjectMapper.Map<List<Vehicle>, List<VehicleLookupDto>>(vehicles));
         }
 
-        public async Task<string> GenerateTripNumberAsync()
+        public async Task<string> GetTripNoAsync()
         {
             var count = await _tripRepository.CountAsync();
 

@@ -15,7 +15,7 @@ export class ProductService {
     this.restService.request<any, void>({
       method: 'POST',
       url: '/api/app/product',
-      body: input.image,
+      body: input,
     },
     { apiName: this.apiName,...config });
   
@@ -45,6 +45,15 @@ export class ProductService {
     { apiName: this.apiName,...config });
   
 
+  getImageContent = (id: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, string>({
+      method: 'GET',
+      responseType: 'text',
+      url: `/api/app/product/${id}/image-content`,
+    },
+    { apiName: this.apiName,...config });
+  
+
   getList = (input: PagedAndSortedResultRequestDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<ProductDto>>({
       method: 'GET',
@@ -66,7 +75,7 @@ export class ProductService {
     this.restService.request<any, void>({
       method: 'PUT',
       url: `/api/app/product/${id}`,
-      body: input.image,
+      body: input,
     },
     { apiName: this.apiName,...config });
 

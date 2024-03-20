@@ -23,12 +23,12 @@ namespace ZeroOneSystem.Vehicles
 {
     public class VehicleAppService : BaseAppService, IVehicleAppService
     {
-        private readonly IRepository<Vehicle, Guid> _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
         private readonly IFileService<VehicleImageContainer> _fileService;
 
         public VehicleAppService(
             IGuidGenerator guidGenerator,
-            IRepository<Vehicle, Guid> vehicleRepository,
+            IVehicleRepository vehicleRepository,
             IFileService<VehicleImageContainer> fileService)
             : base(guidGenerator)
         {
@@ -36,13 +36,13 @@ namespace ZeroOneSystem.Vehicles
             _fileService = fileService;
         }
 
-        public async Task CreateAsync([FromForm] CreateVehicleDto input)
+        public async Task CreateAsync(CreateVehicleDto input)
         {
             var imageFileName = string.Empty;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
+                imageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
             }
 
             var vehicle = Vehicle.Create(
@@ -73,11 +73,6 @@ namespace ZeroOneSystem.Vehicles
 
             var vehicleDtos = ObjectMapper.Map<List<Vehicle>, List<VehicleDto>>(vehicles);
 
-            await Task.WhenAll(vehicleDtos.Select(async x =>
-            {
-                x.ImageContent = await _fileService.GetBase64ContentAsync(x.ImageFileName);
-            }));
-
             return new PagedResultDto<VehicleDto>
             {
                 TotalCount = totalCount,
@@ -95,16 +90,16 @@ namespace ZeroOneSystem.Vehicles
             return vehicleDto;
         }
 
-        public async Task UpdateAsync(Guid id, [FromForm] UpdateVehicleDto input)
+        public async Task UpdateAsync(Guid id, UpdateVehicleDto input)
         {
             var vehicle = await _vehicleRepository.GetAsync(id)
                 ?? throw new EntityNotFoundException(typeof(Vehicle), id);
 
             var imageFileName = vehicle.ImageFileName;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
+                imageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
 
                 if (!vehicle.ImageFileName.IsNullOrEmpty())
                 {
@@ -186,15 +181,25 @@ namespace ZeroOneSystem.Vehicles
 
                 worksheet.Cell(2, 1).InsertData(vehiclesToExport);
 
+                worksheet.BeautifySheet();
+
                 workbook.SaveAs(memoryStream);
             }
 
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.VEHICLES_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
+        }
+
+        [HttpGet]
+        public async Task<string> GetImageContentAsync(Guid id)
+        {
+            var vehicle = await _vehicleRepository.GetAsync(id);
+
+            return await _fileService.GetBase64ContentAsync(vehicle.ImageFileName);
         }
     }
 }

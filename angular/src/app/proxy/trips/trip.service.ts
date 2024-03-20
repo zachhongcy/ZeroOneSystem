@@ -38,15 +38,6 @@ export class TripService {
     { apiName: this.apiName,...config });
   
 
-  generateTripNumber = (config?: Partial<Rest.Config>) =>
-    this.restService.request<any, string>({
-      method: 'POST',
-      responseType: 'text',
-      url: '/api/app/trip/generate-trip-number',
-    },
-    { apiName: this.apiName,...config });
-  
-
   get = (id: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, TripDto>({
       method: 'GET',
@@ -68,6 +59,15 @@ export class TripService {
       method: 'GET',
       url: '/api/app/trip',
       params: { sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getTripNo = (config?: Partial<Rest.Config>) =>
+    this.restService.request<any, string>({
+      method: 'GET',
+      responseType: 'text',
+      url: '/api/app/trip/trip-no',
     },
     { apiName: this.apiName,...config });
   

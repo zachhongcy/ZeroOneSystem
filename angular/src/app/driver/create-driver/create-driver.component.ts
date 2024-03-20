@@ -1,4 +1,3 @@
-import { Rest, RestService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +15,6 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class CreateDriverComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
-  private readonly restService = inject(RestService);
   private readonly driverService = inject(DriverService);
   private readonly toasterService = inject(ToasterService);
 
@@ -24,11 +22,13 @@ export class CreateDriverComponent implements OnInit {
   image: File;
   statuses = statusOptions;
   driverNo: string;
+  imageUrl: string | ArrayBuffer | null = null;
 
   private buildForm(): void {
     this.form = this.fb.group({
       driverNo: [this.driverNo],
-      image: [null],
+      imageName: [''],
+      imageContent: [''],
       driverName: ['', Validators.required],
       licenseNo: ['', Validators.required],
       licenseExpiryDate: [null, Validators.required],
@@ -49,11 +49,11 @@ export class CreateDriverComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.generateDriverNo();
+    this.setDriverNo();
   }
 
-  generateDriverNo(): void {
-    this.driverService.generateDriverNumber().subscribe((driverNo) => {
+  setDriverNo(): void {
+    this.driverService.getDriverNo().subscribe((driverNo) => {
       this.driverNo = driverNo;
       this.form.get('driverNo').setValue(this.driverNo);
     });
@@ -64,24 +64,7 @@ export class CreateDriverComponent implements OnInit {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append('driverNo', this.form.value.driverNo);
-    formData.append('image', this.image);
-    formData.append('driverName', this.form.value.driverName);
-    formData.append('licenseNo', this.form.value.licenseNo);
-    formData.append('licenseExpiryDate', (new Date(this.form.value.licenseExpiryDate)).toDateString());
-    formData.append('contactNo', this.form.value.contactNo);
-    formData.append('employeeCategory', this.form.value.employeeCategory);
-    formData.append('password', this.form.value.password);
-    formData.append('status', this.form.value.status);
-    formData.append('remark', this.form.value.remark);
-    formData.append('emergencyContactName', this.form.value.emergencyContactName);
-    formData.append('emergencyContactNo', this.form.value.emergencyContactNo);
-    formData.append('emergencyRelationship', this.form.value.emergencyRelationship);
-    formData.append('address', this.form.value.address);
-
-    this.createDriver(formData).subscribe(() => {
+    this.driverService.create(this.form.value).subscribe(() => {
       this.toasterService.success('::Driver:CreateSuccess');
       this.router.navigate(['/drivers']);
     });
@@ -94,14 +77,14 @@ export class CreateDriverComponent implements OnInit {
       return;
     }
     
-    this.image = files[0];
+    const image = files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+      this.form.get('imageName').setValue(image.name);
+      const imageUrlString = reader.result as string;
+      this.form.get('imageContent').setValue(imageUrlString.split(',')[1]);
+    }
+    reader.readAsDataURL(image);
   }
-
-  private createDriver = (formData: FormData, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'POST',
-      url: '/api/app/driver',
-      body: formData,
-    },
-    { apiName: 'Default',...config });
 }

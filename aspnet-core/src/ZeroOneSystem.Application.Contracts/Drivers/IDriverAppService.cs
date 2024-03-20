@@ -9,12 +9,13 @@ namespace ZeroOneSystem.Drivers
 {
     public interface IDriverAppService : IApplicationService
     {
-        Task CreateAsync(CreateDriverDro input);
+        Task CreateAsync(CreateDriverDto input);
         Task<PagedResultDto<DriverDto>> GetListAsync(PagedAndSortedResultRequestDto input);
         Task<DriverDto> GetAsync(Guid id);
         Task UpdateAsync(Guid id, UpdateDriverDto input);
         Task DeleteAsync(Guid id);
         Task<IRemoteStreamContent> ExportAsync();
-        Task<string> GenerateDriverNumberAsync();
+        Task<string> GetDriverNoAsync();
+        Task<string> GetImageContentAsync(Guid id);
     }
 }

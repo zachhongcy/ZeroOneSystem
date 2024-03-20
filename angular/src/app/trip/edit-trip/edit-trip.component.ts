@@ -35,7 +35,7 @@ export class EditTripComponent {
   private buildForm(trip: TripDto): void {
     this.form = this.fb.group({
       tripNo: [trip.tripNo, Validators.required],
-      tripType: [trip.tripType, Validators.required],
+      tripType: [{value: trip.tripType, disabled: true}, Validators.required],
       tripDate: [new Date(trip.tripDate), Validators.required],
       tripStatus: [trip.tripStatus, Validators.required],
       customerName: [trip.customerName, Validators.required],
@@ -43,6 +43,7 @@ export class EditTripComponent {
       priority: [trip.priority, Validators.required],
       remark: [trip.remark],
       siteName: [trip.siteName, Validators.required],
+      siteDetail: [trip.siteDetail, Validators.required],
       siteAddress: [trip.siteAddress, Validators.required],
       contactPerson: [trip.contactPerson, Validators.required],
       contactNo: [trip.contactNo, Validators.required],

@@ -14,7 +14,7 @@ export class VehicleService {
     this.restService.request<any, void>({
       method: 'POST',
       url: '/api/app/vehicle',
-      body: input.image,
+      body: input,
     },
     { apiName: this.apiName,...config });
   
@@ -44,6 +44,15 @@ export class VehicleService {
     { apiName: this.apiName,...config });
   
 
+  getImageContent = (id: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, string>({
+      method: 'GET',
+      responseType: 'text',
+      url: `/api/app/vehicle/${id}/image-content`,
+    },
+    { apiName: this.apiName,...config });
+  
+
   getList = (input: PagedAndSortedResultRequestDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<VehicleDto>>({
       method: 'GET',
@@ -57,7 +66,7 @@ export class VehicleService {
     this.restService.request<any, void>({
       method: 'PUT',
       url: `/api/app/vehicle/${id}`,
-      body: input.image,
+      body: input,
     },
     { apiName: this.apiName,...config });
 

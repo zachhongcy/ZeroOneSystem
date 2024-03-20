@@ -1,10 +1,11 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { ProductDto } from '@proxy/products/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
 import { ProductService } from '@proxy/products';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { productColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-product',
@@ -16,31 +17,7 @@ export class ProductComponent implements OnInit {
   products = { items: [], totalCount: 0 } as PagedResultDto<ProductDto>;
   isColumnVisibilityModalOpen = false;
 
-  columns = [
-    { prop: 'imageContent', name: '::Product:Picture', visible: true, template: CellTemplate.Image },
-    { prop: 'code', name: '::Product:Code', visible: true },
-    { prop: 'nameEn', name: '::Product:NameEn', visible: true },
-    { prop: 'nameCn', name: '::Product:NameCn', visible: true },
-    { prop: 'productGroupCodeName', name: '::Product:ProductGroup', visible: true },
-    { 
-      prop: 'uom', 
-      name: '::Product:Uom', 
-      visible: true,
-      enumName: '::Product:EnumUom.',
-      template: CellTemplate.Enum  
-    },
-    { prop: 'productQuantities', name: '::Product:Quantities', visible: true, template: CellTemplate.Multiline },
-    { prop: 'location', name: '::Product:Location', visible: true },
-    { 
-      prop: 'status', 
-      name: '::Product:Status', 
-      visible: true, 
-      enumName: '::Product:EnumStatus.',
-      template: CellTemplate.Enum 
-    },
-    { prop: 'owner', name: '::Product:Owner', visible: true },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime },
-  ];
+  columns = productColumns;
 
   constructor(
     public readonly list: ListService, 
@@ -82,5 +59,10 @@ export class ProductComponent implements OnInit {
 
   setColumnsVisibility(): void {
     this.isColumnVisibilityModalOpen = true;
+  }
+
+  getImageContent(id: string): Observable<string> {
+    console.log(id);
+    return this.productService.getImageContent(id);
   }
 }

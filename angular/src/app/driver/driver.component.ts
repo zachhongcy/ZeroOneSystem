@@ -1,11 +1,12 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { DriverDto } from '@proxy/drivers/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
+import { CellTemplate } from '../shared/enums/cell-template.enum';
 import { DriverService } from '@proxy/drivers';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DriverColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-driver',
@@ -16,24 +17,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class DriverComponent implements OnInit {
   drivers = { items: [], totalCount: 0 } as PagedResultDto<DriverDto>;
   isColumnVisibilityModalOpen = false;
-
-  columns = [
-    { prop: 'imageContent', name: '::Driver:Picture', visible: true, template: CellTemplate.Image },
-    { prop: 'driverNo', name: '::Driver:Number', visible: true },
-    { prop: 'driverName', name: '::Driver:Name', visible: true },
-    { prop: 'licenseNo', name: '::Driver:LicenseNo', visible: true },
-    { prop: 'licenseExpiryDate', name: '::Driver:LicenseExpiryDate', visible: true, template: CellTemplate.Date },
-    { prop: 'contactNo', name: '::Driver:ContactNo', visible: true },
-    { prop: 'employeeCategory', name: '::Driver:EmployeeCategory', visible: true },
-    { 
-      prop: 'status', 
-      name: '::Driver:Status', 
-      visible: true, 
-      enumName: '::Driver:EnumStatus.', 
-      template: CellTemplate.Enum, 
-    },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime, },
-  ];
+  columns = DriverColumns;
   
 
   constructor(

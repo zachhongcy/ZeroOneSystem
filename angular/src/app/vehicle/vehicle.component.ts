@@ -1,10 +1,11 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { VehicleDto } from '@proxy/vehicles/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
+import { CellTemplate } from '../shared/enums/cell-template.enum';
 import { VehicleService } from '@proxy/vehicles';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
+import { VehicleColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-vehicle',
@@ -15,29 +16,7 @@ import { DatePipe } from '@angular/common';
 export class VehicleComponent implements OnInit {
   vehicles = { items: [], totalCount: 0 } as PagedResultDto<VehicleDto>;
   isColumnVisibilityModalOpen = false;
-
-  columns = [
-    { prop: 'imageContent', name: '::Vehicle:Picture', visible: true, template: CellTemplate.Image },
-    { prop: 'vehiclePlate', name: '::Vehicle:Plate', visible: true },
-    { prop: 'vehicleModel', name: '::Vehicle:Model', visible: true },
-    { 
-      prop: 'vehicleType', 
-      name: '::Vehicle:Type', 
-      visible: true, 
-      enumName: '::Vehicle:EnumType.',
-      template: CellTemplate.Enum 
-    },
-    { prop: 'roadTaxExpiryDate', name: '::Vehicle:RoadTaxExpiryDate', visible: true, template: CellTemplate.Date },
-    { prop: 'serviceDate', name: '::Vehicle:ServiceDate', visible: true, template: CellTemplate.Date },
-    { 
-      prop: 'status', 
-      name: '::Vehicle:Status', 
-      visible: true, 
-      enumName: '::Vehicle:EnumStatus.', 
-      template: CellTemplate.Enum, 
-    },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime },
-  ];
+  columns = VehicleColumns;
 
   constructor(
     public readonly list: ListService,

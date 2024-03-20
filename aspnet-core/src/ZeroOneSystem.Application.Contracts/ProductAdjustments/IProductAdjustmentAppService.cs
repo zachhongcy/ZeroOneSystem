@@ -15,6 +15,6 @@ namespace ZeroOneSystem.ProductAdjustments
         Task UpdateAsync(Guid id, UpdateProductAdjustmentDto input);
         Task DeleteAsync(Guid id);
         Task<IRemoteStreamContent> ExportAsync();
-        Task<string> GenerateDocumentNoAsync();
+        Task<string> GetDocumentNoAsync();
     }
 }

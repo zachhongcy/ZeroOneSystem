@@ -1,10 +1,10 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { ProductAdjustmentDto } from '@proxy/product-adjustments/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
 import { ProductAdjustmentService } from '@proxy/product-adjustments';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
+import { ProductAdjustmentColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-product-adjustment',
@@ -15,14 +15,7 @@ import { DatePipe } from '@angular/common';
 export class ProductAdjustmentComponent implements OnInit {
   productAdjustments = { items: [], totalCount: 0 } as PagedResultDto<ProductAdjustmentDto>;
   isColumnVisibilityModalOpen = false;
-
-  columns = [
-    { prop: 'documentNo', name: '::ProductAdjustment:DocumentNo', visible: true },
-    { prop: 'documentDate', name: '::ProductAdjustment:Date', visible: true, template: CellTemplate.Date },
-    { prop: 'description', name: '::ProductAdjustment:Description', visible: true },
-    { prop: 'totalCost', name: '::ProductAdjustment:Total', visible: true, template: CellTemplate.Price },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime },
-  ];
+  columns = ProductAdjustmentColumns;
 
   constructor(
     public readonly list: ListService, 

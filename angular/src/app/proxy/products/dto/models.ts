@@ -1,11 +1,11 @@
-import type { IRemoteStreamContent } from '../../volo/abp/content/models';
 import type { Uom } from '../../enums/products/uom.enum';
 import type { Status } from '../../enums/common/status.enum';
 import type { CreationAuditedEntityDto } from '@abp/ng.core';
 
 export interface CreateProductDto {
   code?: string;
-  image: IRemoteStreamContent;
+  imageName?: string;
+  imageContent?: string;
   nameEn?: string;
   nameCn?: string;
   uom: Uom;
@@ -23,8 +23,6 @@ export interface CreateProductDto {
 
 export interface ProductDto extends CreationAuditedEntityDto<string> {
   code?: string;
-  imageFileName?: string;
-  imageContent: number[];
   nameEn?: string;
   nameCn?: string;
   productGroupCodeName?: string;
@@ -33,6 +31,7 @@ export interface ProductDto extends CreationAuditedEntityDto<string> {
   quantityPa: number;
   quantityRu: number;
   quantityRn: number;
+  productQuantities?: string;
   location?: string;
   status: Status;
   owner?: string;
@@ -68,7 +67,8 @@ export interface ProductSizeDto {
 
 export interface UpdateProductDto {
   code?: string;
-  image: IRemoteStreamContent;
+  imageName?: string;
+  imageContent?: string;
   nameEn?: string;
   nameCn?: string;
   uom: Uom;

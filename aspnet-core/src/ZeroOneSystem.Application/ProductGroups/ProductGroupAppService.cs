@@ -14,17 +14,18 @@ using Volo.Abp.Guids;
 using ZeroOneSystem.Common;
 using ZeroOneSystem.Constants;
 using ZeroOneSystem.Extensions;
+using ZeroOneSystem.ProductAdjustments.Dto;
 using ZeroOneSystem.ProductGroups.Dto;
 
 namespace ZeroOneSystem.ProductGroups
 {
     public class ProductGroupAppService : BaseAppService, IProductGroupAppService
     {
-        private readonly IRepository<ProductGroup, Guid> _productGroupRepository;
+        private readonly IProductGroupRepository _productGroupRepository;
 
         public ProductGroupAppService(
             IGuidGenerator guidGenerator,
-            IRepository<ProductGroup, Guid> productGroupRepository)
+            IProductGroupRepository productGroupRepository)
             : base(guidGenerator)
         {
             _productGroupRepository = productGroupRepository;
@@ -51,7 +52,7 @@ namespace ZeroOneSystem.ProductGroups
             await _productGroupRepository.InsertAsync(productGroup);
         }
 
-        public async Task<PagedResultDto<ProductGroupDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<ProductGroupDto>> GetListAsync(GetProductGroupsDto input)
         {
             if (input.Sorting.IsNullOrEmpty())
             {
@@ -60,8 +61,8 @@ namespace ZeroOneSystem.ProductGroups
 
             var totalCount = await _productGroupRepository.CountAsync();
 
-            var productGroups = await _productGroupRepository.GetPagedListAsync(
-                input.SkipCount, input.MaxResultCount, input.Sorting);
+            var productGroups = await _productGroupRepository
+                .GetListAsync(input.SkipCount, input.MaxResultCount, input.Sorting, input.Filter);
 
             return new PagedResultDto<ProductGroupDto>
             {
@@ -151,7 +152,7 @@ namespace ZeroOneSystem.ProductGroups
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.PRODUCT_GROUPS_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
         }

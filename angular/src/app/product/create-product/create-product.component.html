@@ -6,12 +6,61 @@
     </div>
 
     <div class="card-body">
-        <mat-horizontal-stepper linear>
-            <mat-step 
-                [label]="'::Product:BasicDetails' | abpLocalization"
-                [stepControl]="basicDetailsForm"
-                state="basicDetails">
-                <form class="row g-2" [formGroup]="basicDetailsForm">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active px-5" 
+                    id="basic-details-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#basic-details-tab-pane" 
+                    type="button" role="tab" 
+                    aria-controls="basic-details-tab-pane" 
+                    aria-selected="true">
+                    {{ '::Product:BasicDetails' | abpLocalization }}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-5" 
+                    id="product-size-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#product-size-tab-pane" 
+                    type="button" role="tab" 
+                    aria-controls="product-size-tab-pane" 
+                    aria-selected="false">
+                    {{ '::Product:SizeDetails' | abpLocalization }}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-5" 
+                    id="product-price-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#product-price-tab-pane" 
+                    type="button" role="tab" 
+                    aria-controls="product-price-tab-pane" 
+                    aria-selected="false">
+                    {{ '::Product:PriceDetails' | abpLocalization }}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-5" 
+                    id="product-transaction-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#product-transaction-tab-pane" 
+                    type="button" role="tab" 
+                    aria-controls="product-transaction-tab-pane" 
+                    aria-selected="false">
+                    {{ '::Product:TransactionDetails' | abpLocalization }}
+                </button>
+            </li>
+        </ul>
+
+        <form [formGroup]="productForm" (ngSubmit)="save()">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" 
+                id="basic-details-tab-pane" 
+                role="tabpanel" 
+                aria-labelledby="basic-details-tab" 
+                tabindex="0">
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="code" class="form-label">
                             {{ '::Product:Code' | abpLocalization }}
@@ -28,9 +77,14 @@
                         </label>
                     </div>
                     <div class="col-md-4">
-                        <input type="file" id="picture" class="form-control" formControlName="image" (change)="addImageToForm($event)" />
+                        <div class="col-md-6">
+                            <img [src]="imageUrl" class="img-fluid" *ngIf="imageUrl" alt="Selected Image">
+                        </div>
+                        <input type="file" accept="image/*" id="picture" class="form-control" (change)="addImageToForm($event)" />
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="name-en" class="form-label">
                             {{ '::Product:NameEn' | abpLocalization }}
@@ -50,7 +104,9 @@
                     <div class="col-md-4">
                         <input type="text" id="name-cn" class="form-control" formControlName="nameCn" />
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="product-group" class="form-label">
                             {{ '::Product:ProductGroup' | abpLocalization }}
@@ -80,7 +136,9 @@
                             </option>
                         </select>
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="quantity-pr" class="form-label">
                             {{ '::Product:QuantityPr' | abpLocalization }}
@@ -100,7 +158,9 @@
                     <div class="col-md-4">
                         <input type="number" id="quantity-pa" class="form-control" formControlName="quantityPa" />
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="quantity-ru" class="form-label">
                             {{ '::Product:QuantityRu' | abpLocalization }}
@@ -120,7 +180,9 @@
                     <div class="col-md-4">
                         <input type="number" id="quantity-rn" class="form-control" formControlName="quantityRn" />
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="status" class="form-label">
                             {{ '::Product:Status' | abpLocalization }}
@@ -145,7 +207,9 @@
                     <div class="col-md-4">
                         <input type="text" id="location" class="form-control" formControlName="location" />
                     </div>
-                    
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="owner" class="form-label">
                             {{ '::Product:Owner' | abpLocalization }}
@@ -155,38 +219,33 @@
                     <div class="col-md-4">
                         <input type="text" id="owner" class="form-control" formControlName="owner" />
                     </div>
-                    
-                    <div class="pt-2">
-                        <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/products']">
-                            {{ '::Cancel' | abpLocalization }}
-                        </button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step
-                [label]="'::Product:SizeDetails' | abpLocalization"
-                [stepControl]="sizeDetailsForm"
-                state="sizeDetails">
-                <form class="row g-2" [formGroup]="sizeDetailsForm">
+                </div>
+            </div>
+            <div class="tab-pane fade" 
+                id="product-size-tab-pane" 
+                role="tabpanel" 
+                aria-labelledby="product-size-tab" 
+                tabindex="0">
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="type">
                             {{ '::Product:Type' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="text" id="type" class="form-control" formControlName="type" />
                     </div>
-
-                    <div class="col-md-6"></div>
-
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="height">
                             {{ '::Product:Height' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="number" id="height" class="form-control" formControlName="height" />
                     </div>
                     
@@ -196,17 +255,19 @@
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="number" id="length" class="form-control" formControlName="length" />
                     </div>
-                    
+                </div>
+    
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="width">
                             {{ '::Product:Width' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="number" id="width" class="form-control" formControlName="width" />
                     </div>
                     
@@ -216,48 +277,47 @@
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="number" id="thickness" class="form-control" formControlName="thickness" />
                     </div>
-
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="remark">{{ '::Product:Remark' | abpLocalization }}</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" formGroupName="productSize">
                         <input type="text" id="remark" class="form-control" formControlName="remark" />
                     </div>
-                    
-                    <div class="pt-2">
-                        <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/products']">
-                            {{ '::Cancel' | abpLocalization }}
-                        </button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step
-                [label]="'::Product:PriceDetails' | abpLocalization"
-                [stepControl]="priceDetailsForm"
-                state="priceDetails">
-                <form class="row g-3" [formGroup]="priceDetailsForm">
+                </div>
+            </div>
+            <div class="tab-pane fade" 
+                id="product-price-tab-pane" 
+                role="tabpanel" 
+                aria-labelledby="product-price-tab" 
+                tabindex="0">
+                <div class="row py-2">
                     <div class="col-md-4">
                         <h3 class="display-3 fw-bold">{{ '::Product:PurchaseCost' | abpLocalization }}</h3>
                     </div>
-
+        
                     <div class="col-md-4">
                         <h3 class="display-3 fw-bold">{{ '::Product:SellingPrice' | abpLocalization }}</h3>
                     </div>
-
+        
                     <div class="col-md-4">
                         <h3 class="display-3 fw-bold">{{ '::Product:RentalPrice' | abpLocalization }}</h3>
                     </div>
+                </div>
 
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="standardPurchaseCost" class="form-label">
                             {{ '::Product:StandardPurchaseCost' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -265,14 +325,14 @@
                             <input type="number" id="standardPurchaseCost" class="form-control" formControlName="standardPurchaseCost" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="standardSellingPrice" class="form-label">
                             {{ '::Product:StandardSellingPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -280,29 +340,31 @@
                             <input type="number" id="standardSellingPrice" class="form-control" formControlName="standardSellingPrice" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="standardRentalPrice" class="form-label">
                             {{ '::Product:StandardRentalPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
                             </div>
                             <input type="number" id="standardRentalPrice" class="form-control" formControlName="standardRentalPrice" />
                         </div>
-                    </div>
-
+                    </div> 
+                </div>
+    
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="min-purchase-cost" class="form-label">
                             {{ '::Product:MinPurchaseCost' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -310,13 +372,13 @@
                             <input type="number" id="min-purchase-cost" class="form-control" formControlName="minPurchaseCost" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="selling-price-2" class="form-label">
                             {{ '::Product:SellingPrice2' | abpLocalization }}
                         </label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -324,13 +386,13 @@
                             <input type="number" id="selling-price-2" class="form-control" formControlName="sellingPrice2" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="rental-price-2" class="form-label">
                             {{ '::Product:RentalPrice2' | abpLocalization }}
                         </label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -338,14 +400,16 @@
                             <input type="number" id="rental-price-2" class="form-control" formControlName="rentalPrice2" />
                         </div>
                     </div>
-                    
+                </div>
+    
+                <div class="row py-2">
                     <div class="col-md-2">
                         <label for="max-purchase-cost" class="form-label">
                             {{ '::Product:MaxPurchaseCost' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -359,7 +423,7 @@
                             {{ '::Product:SellingPrice3' | abpLocalization }}
                         </label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -373,7 +437,7 @@
                             {{ '::Product:RentalPrice3' | abpLocalization }}
                         </label>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -381,16 +445,18 @@
                             <input type="number" id="rental-price-3" class="form-control" formControlName="rentalPrice3" />
                         </div>
                     </div>
-
+                </div>
+                
+                <div class="row py-2">
                     <div class="col-md-4"></div>
-                    
+                
                     <div class="col-md-2">
                         <label for="min-selling-price" class="form-label">
                             {{ '::Product:MinSellingPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -398,14 +464,14 @@
                             <input type="number" id="min-selling-price" class="form-control" formControlName="minSellingPrice" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="min-rental-price" class="form-label">
                             {{ '::Product:MinRentalPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -413,16 +479,18 @@
                             <input type="number" id="min-rental-price" class="form-control" formControlName="minRentalPrice" />
                         </div>
                     </div>
-
+                </div>
+    
+                <div class="row py-2">
                     <div class="col-md-4"></div>
-                    
+                
                     <div class="col-md-2">
                         <label for="max-selling-price" class="form-label">
                             {{ '::Product:MaxSellingPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -430,14 +498,14 @@
                             <input type="number" id="max-selling-price" class="form-control" formControlName="maxSellingPrice" />
                         </div>
                     </div>
-
+        
                     <div class="col-md-2">
                         <label for="max-rental-price" class="form-label">
                             {{ '::Product:MaxRentalPrice' | abpLocalization }}
                         </label>
                         <span> * </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" formGroupName="productPrice">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">RM</span>
@@ -445,83 +513,72 @@
                             <input type="number" id="max-rental-price" class="form-control" formControlName="maxRentalPrice" />
                         </div>
                     </div>
-
-                    <div class="pt-2">
-                        <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/products']">
-                            {{ '::Cancel' | abpLocalization }}
-                        </button>
+                </div>
+            </div>
+            <div class="tab-pane fade" 
+                id="product-transaction-tab-pane" 
+                role="tabpanel" 
+                aria-labelledby="product-transaction-tab" 
+                tabindex="0">
+                <div class="card">
+                    <div class="card-title">
+                        <h3 class="display-3 fw-bold">
+                            {{ '::Product:StockIn' | abpLocalization }}
+                        </h3>
                     </div>
-                </form>
-            </mat-step>
-            <mat-step
-                [label]="'::Product:TransactionDetails' | abpLocalization"
-                state="transactionDetails">
-            <div class="card">
-                <div class="card-title">
-                    <h3 class="display-3 fw-bold">
-                        {{ '::Product:StockIn' | abpLocalization }}
-                    </h3>
+                    <div class="card-body">
+                        <ngx-datatable>
+                            <ng-container *ngFor="let column of columns">
+                            <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                <app-datatable-cell 
+                                    [template]="column.template" 
+                                    [value]="value"
+                                    [enumName]="column.enumName"></app-datatable-cell>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            </ng-container>
+                        </ngx-datatable>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ngx-datatable>
-                        <ng-container *ngFor="let column of columns">
-                        <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
-                            <ng-template let-value="value" ngx-datatable-cell-template>
-                            <app-datatable-cell 
-                                [template]="column.template" 
-                                [value]="value"
-                                [enumName]="column.enumName"></app-datatable-cell>
-                            </ng-template>
-                        </ngx-datatable-column>
-                        </ng-container>
-                    </ngx-datatable>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    <h3 class="display-3 fw-bold">
-                        {{ '::Product:StockOut' | abpLocalization }}
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <ngx-datatable>
-                        <ng-container *ngFor="let column of columns">
-                        <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
-                            <ng-template let-value="value" ngx-datatable-cell-template>
-                            <app-datatable-cell 
-                                [template]="column.template" 
-                                [value]="value"
-                                [enumName]="column.enumName"></app-datatable-cell>
-                            </ng-template>
-                        </ngx-datatable-column>
-                        </ng-container>
-                    </ngx-datatable>
+    
+                <div class="card">
+                    <div class="card-title">
+                        <h3 class="display-3 fw-bold">
+                            {{ '::Product:StockOut' | abpLocalization }}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ngx-datatable>
+                            <ng-container *ngFor="let column of columns">
+                            <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                <app-datatable-cell 
+                                    [template]="column.template" 
+                                    [value]="value"
+                                    [enumName]="column.enumName"></app-datatable-cell>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            </ng-container>
+                        </ngx-datatable>
+                    </div>
                 </div>
             </div>
+            </div>
 
+            <div class="text-danger">
+                {{ errorMessages }}
+            </div>
+        
             <div class="pt-2">
-                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/products']">
+                <button type="button" class="btn btn-light mx-3 px-4" [routerLink]="['/products']">
                     {{ '::Cancel' | abpLocalization }}
                 </button>
-                <button type="button" class="btn btn-secondary m-1 px-2" (click)="save()">
-                    <i class="fa fa-check me-1"></i>
+                <button type="button" class="btn btn-secondary mx-3 px-4" (click)="save()">
+                    <i class="fa fa-check me-2"></i>
                     {{ '::Save' | abpLocalization }}
                 </button>
             </div>
-            </mat-step>
-            <ng-template matStepperIcon="basicDetails">
-                <mat-icon>info</mat-icon>
-            </ng-template>
-            <ng-template matStepperIcon="sizeDetails">
-                <mat-icon>aspect_ratio</mat-icon>
-            </ng-template>
-            <ng-template matStepperIcon="priceDetails">
-                <mat-icon>monetization_on</mat-icon>
-            </ng-template>
-            <ng-template matStepperIcon="transactionDetails">
-                <mat-icon>compare_arrows</mat-icon>
-            </ng-template>
-        </mat-horizontal-stepper>
+        </form>
     </div>
 </div>

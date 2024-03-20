@@ -66,7 +66,7 @@ export class CreateProductAdjustmentComponent implements OnInit {
   }
 
   private generateDocumentNumber(): void {
-    this.productAdjustmentService.generateDocumentNo().subscribe((documentNo) => {
+    this.productAdjustmentService.getDocumentNo().subscribe((documentNo) => {
       this.documentNo = documentNo;
       this.form.get('documentNo').setValue(this.documentNo);
     });

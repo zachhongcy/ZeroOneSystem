@@ -36,19 +36,19 @@ export class ProductAdjustmentService {
     { apiName: this.apiName,...config });
   
 
-  generateDocumentNo = (config?: Partial<Rest.Config>) =>
-    this.restService.request<any, string>({
-      method: 'POST',
-      responseType: 'text',
-      url: '/api/app/product-adjustment/generate-document-no',
-    },
-    { apiName: this.apiName,...config });
-  
-
   get = (id: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, ProductAdjustmentDto>({
       method: 'GET',
       url: `/api/app/product-adjustment/${id}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getDocumentNo = (config?: Partial<Rest.Config>) =>
+    this.restService.request<any, string>({
+      method: 'GET',
+      responseType: 'text',
+      url: '/api/app/product-adjustment/document-no',
     },
     { apiName: this.apiName,...config });
   

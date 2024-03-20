@@ -3,7 +3,7 @@
         <button class="btn btn-link p-0 m-0 d-inline align-baseline" 
             type="button" 
             (click)="openImage(value)">
-            <span class="fs-5 text">{{ '::ViewPicture' | abpLocalization }}</span>
+            <span class="fs-6 text">{{ '::ViewPicture' | abpLocalization }}</span>
         </button>
     </div>
     <div *ngSwitchCase="cellTemplate.DateTime">
@@ -30,12 +30,10 @@
     </div>
 </ng-container>
 
-<abp-modal #imageModal [(visible)]="isImageModalOpen" [options]="{size: 'xl', keyboard: true}">
+<abp-modal #imageModal [(visible)]="isImageModalOpen" centered="true" scrollable="false" [options]="{ keyboard: true }">
     <ng-template #abpHeader>
     </ng-template>
     <ng-template #abpBody>
-      <div class="image-container">
-        <img class="img-fluid" [src]="openedImageSrc">
-      </div>
+        <img class="img-fluid mx-auto d-block" [src]="openedImageSrc" [alt]="source + ' Image'">
     </ng-template>
 </abp-modal>

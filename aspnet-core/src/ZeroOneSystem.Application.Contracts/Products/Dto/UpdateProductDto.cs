@@ -9,7 +9,8 @@ namespace ZeroOneSystem.Products.Dto
     public class UpdateProductDto
     {
         public string Code { get; set; }
-        public IRemoteStreamContent? Image { get; set; }
+        public string? ImageName { get; set; } = string.Empty;
+        public string? ImageContent { get; set; }
         public string NameEn { get; set; }
         public string NameCn { get; set; }
         public Uom Uom { get; set; }
@@ -21,6 +22,7 @@ namespace ZeroOneSystem.Products.Dto
         public Status Status { get; set; }
         public string Owner { get; set; }
         public Guid ProductGroupId { get; set; }
+
         public ProductSizeDto ProductSize { get; set; }
         public ProductPriceDto ProductPrice { get; set; }
     }

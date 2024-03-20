@@ -7,9 +7,6 @@ namespace ZeroOneSystem.Drivers.Dto
     public class DriverDto : CreationAuditedEntityDto<Guid>
     {
         public string DriverNo { get; set; }
-        public Guid ImageId { get; set; }
-        public string ImageFileName { get; set; }
-        public string ImageContent { get; set; }
         public string DriverName { get; set; }
         public string LicenseNo { get; set; }
         public DateTime LicenseExpiryDate { get; set; }

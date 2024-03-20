@@ -16,6 +16,7 @@ namespace ZeroOneSystem.Trips.Dto
         public string? Remark { get; set; }
         public string SiteName { get; set; }
         public string SiteDetails { get; set; }
+        public SiteDetail SiteDetail { get; set; }
         public string SiteAddress { get; set; }
         public string ContactPerson { get; set; }
         public string ContactNo { get; set; }

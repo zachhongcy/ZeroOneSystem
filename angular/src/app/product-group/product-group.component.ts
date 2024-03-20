@@ -1,10 +1,10 @@
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { ProductGroupDto } from '@proxy/product-groups/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
 import { ProductGroupService } from '@proxy/product-groups';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
+import { productGroupColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-product-group',
@@ -16,20 +16,7 @@ export class ProductGroupComponent implements OnInit {
   productGroups = { items: [], totalCount: 0 } as PagedResultDto<ProductGroupDto>;
   isColumnVisibilityModalOpen = false;
 
-  columns = [
-    { prop: 'name', name: '::ProductGroup:Name', visible: true },
-    { prop: 'shortCode', name: '::ProductGroup:ShortCode', visible: true },
-    { prop: 'description', name: '::ProductGroup:Description', visible: true },
-    { 
-      prop: 'status', 
-      name: '::ProductGroup:Status', 
-      visible: true, 
-      enumName: '::ProductGroup:EnumStatus.',
-      template: CellTemplate.Enum 
-    },
-    { prop: 'isForSales', name: '::ProductGroup:IsForSales', visible: true, template: CellTemplate.YesNo },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime },
-  ];
+  columns = productGroupColumns;
 
   constructor(
     public readonly list: ListService, 

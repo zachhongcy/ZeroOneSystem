@@ -11,11 +11,7 @@ export class HomeComponent {
     return this.authService.isAuthenticated;
   }
 
-  constructor(private authService: AuthService) {
-    if (!this.hasLoggedIn) {
-      this.authService.navigateToLogin();
-    }
-  }
+  constructor(private authService: AuthService) {}
 
   login() {
     this.authService.navigateToLogin();

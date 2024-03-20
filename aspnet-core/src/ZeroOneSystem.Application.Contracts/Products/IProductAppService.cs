@@ -17,5 +17,6 @@ namespace ZeroOneSystem.Products
         Task DeleteAsync(Guid id);
         Task<ListResultDto<ProductGroupLookupDto>> GetProductGroupLookupAsync();
         Task<IRemoteStreamContent> ExportAsync();
+        Task<string> GetImageContentAsync(Guid id);
     }
 }

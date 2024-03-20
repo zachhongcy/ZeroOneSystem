@@ -9,7 +9,8 @@ namespace ZeroOneSystem.Vehicles.Dto
     public class CreateVehicleDto
     {
         public VehicleType VehicleType { get; set; }
-        public IRemoteStreamContent? Image { get; set; }
+        public string? ImageName { get; set; } = string.Empty;
+        public string? ImageContent { get; set; }
         public string VehiclePlate { get; set; }
         public string VehicleModel { get; set; }
         public DateTime RoadTaxExpiryDate { get; set; }

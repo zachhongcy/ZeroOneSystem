@@ -1,4 +1,3 @@
-import { Rest, RestService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,7 +20,6 @@ export class EditVehicleComponent {
   private readonly fb = inject(FormBuilder);
   private readonly vehicleService = inject(VehicleService);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly restService = inject(RestService);
   private readonly toasterService = inject(ToasterService);
 
   id: string;
@@ -29,11 +27,13 @@ export class EditVehicleComponent {
   image: File;
   statuses = statusOptions;
   vehicleTypes = vehicleTypeOptions;
+  imageUrl: string | ArrayBuffer | null = null;
 
   private buildForm(vehicle: VehicleDto): void {
     this.form = this.fb.group({
       vehicleType: [vehicle.vehicleType, Validators.required],
-      image: [null],
+      imageName: [''],
+      imageContent: [''],
       vehiclePlate: [vehicle.vehiclePlate, Validators.required],
       vehicleModel: [vehicle.vehicleModel, Validators.required],
       roadTaxExpiryDate: [new Date(vehicle.roadTaxExpiryDate), Validators.required],
@@ -49,9 +49,18 @@ export class EditVehicleComponent {
         filter(params => params.id),
         tap(({ id }) => (this.id = id)),
         switchMap(({ id }) => this.vehicleService.get(id)),
-        tap(productGroup => this.buildForm(productGroup))
+        tap(vehicle => {
+          this.buildForm(vehicle);
+          this.setImageUrl(vehicle.id)
+        })
       )
       .subscribe();
+  }
+
+  private setImageUrl(id: string): void {
+    this.vehicleService.getImageContent(id).subscribe((imageContent) => {
+      this.imageUrl = 'data:image/png;base64,' + imageContent;
+    });
   }
 
   save(): void {
@@ -59,18 +68,7 @@ export class EditVehicleComponent {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append('vehicleType', this.form.value.vehicleType);
-    formData.append('image', this.image);
-    formData.append('vehiclePlate', this.form.value.vehiclePlate);
-    formData.append('vehicleModel', this.form.value.vehicleModel);
-    formData.append('roadTaxExpiryDate', (new Date(this.form.value.roadTaxExpiryDate)).toDateString());
-    formData.append('serviceDate', (new Date(this.form.value.serviceDate)).toDateString());
-    formData.append('status', this.form.value.status);
-    formData.append('remark', this.form.value.remark);
-
-    this.updateVehicle(formData).subscribe(() => {
+    this.vehicleService.update(this.id, this.form.value).subscribe(() => {
       this.toasterService.success('::Vehicle:EditSuccess');
       this.router.navigate(['/vehicles']);
     })
@@ -83,14 +81,14 @@ export class EditVehicleComponent {
       return;
     }
     
-    this.image = files[0];
+    const image = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+      this.form.get('imageName').setValue(image.name);
+      const imageUrlString = reader.result as string;
+      this.form.get('imageContent').setValue(imageUrlString.split(',')[1]);
+    }
   }
-
-  private updateVehicle = (formData: FormData, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'PUT',
-      url: `/api/app/vehicle/${this.id}`,
-      body: formData,
-    },
-    { apiName: 'Default',...config });
 }

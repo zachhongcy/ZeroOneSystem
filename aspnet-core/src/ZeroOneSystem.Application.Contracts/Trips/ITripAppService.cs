@@ -19,6 +19,6 @@ namespace ZeroOneSystem.Trips
         Task<IRemoteStreamContent> ExportAsync();
         Task<ListResultDto<DriverLookupDto>> GetDriverLookupAsync();
         Task<ListResultDto<VehicleLookupDto>> GetVehicleLookupAsync();
-        Task<string> GenerateTripNumberAsync();
+        Task<string> GetTripNoAsync();
     }
 }

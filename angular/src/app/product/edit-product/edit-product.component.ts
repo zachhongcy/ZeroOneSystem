@@ -1,4 +1,3 @@
-import { Rest, RestService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, inject } from '@angular/core';
@@ -10,6 +9,7 @@ import { ProductGroupLookupDto } from '@proxy/product-groups/dto';
 import { ProductService } from '@proxy/products';
 import { ProductDto } from '@proxy/products/dto';
 import { Observable, filter, map, switchMap, tap } from 'rxjs';
+import { ProductTransactionColumns } from 'src/app/shared/models/column';
 
 @Component({
   selector: 'app-edit-product',
@@ -25,32 +25,25 @@ import { Observable, filter, map, switchMap, tap } from 'rxjs';
 export class EditProductComponent {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
-  private readonly restService = inject(RestService);
   private readonly productService = inject(ProductService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly toasterService = inject(ToasterService);
 
   id: string;
-  basicDetailsForm: FormGroup;
-  sizeDetailsForm: FormGroup;
-  priceDetailsForm: FormGroup;
+  imageUrl: string | ArrayBuffer | null = null;
+  errorMessages: string;
+  productForm: FormGroup;
   image: File;
   statuses = statusOptions;
   uoms = uomOptions;
   productGroups$: Observable<ProductGroupLookupDto[]>;
-
-  columns = [
-    { prop: 'companyName', name: '::Product:CompanyName', visible: true },
-    { prop: 'transactionDate', name: '::Product:TransactionDate', visible: true },
-    { prop: 'unitPrice', name: '::Product:UnitPrice', visible: true },
-    { prop: 'quantity', name: '::Product:Quantity', visible: true },
-    { prop: 'subTotal', name: '::Product:SubTotal', visible: true },
-  ];
+  columns = ProductTransactionColumns;
 
   private buildForm(product: ProductDto): void {
-    this.basicDetailsForm = this.fb.group({
+    this.productForm = this.fb.group({
       code: [product.code, Validators.required],
-      image: [null],
+      imageName: [''],
+      imageContent: [''],
       nameEn: [product.nameEn, Validators.required],
       nameCn: [product.nameCn, Validators.required],
       productGroupId: [product.productGroupId, Validators.required],
@@ -62,32 +55,30 @@ export class EditProductComponent {
       status: [product.status, Validators.required],
       location: [product.location, Validators.required],
       owner: [product.owner, Validators.required],
-    });
-
-    this.sizeDetailsForm = this.fb.group({
-      type: [product.productSize.type, Validators.required],
-      height: [product.productSize.height, Validators.required],
-      length: [product.productSize.length, Validators.required],
-      width: [product.productSize.width, Validators.required],
-      thickness: [product.productSize.thickness, Validators.required],
-      remark: [product.productSize.remark],
-    });
-
-    this.priceDetailsForm = this.fb.group({
-      standardPurchaseCost: [product.productPrice.standardPurchaseCost, Validators.required],
-      minPurchaseCost: [product.productPrice.minPurchaseCost, Validators.required],
-      maxPurchaseCost: [product.productPrice.standardSellingPrice, Validators.required],
-      standardSellingPrice: [product.productPrice.standardSellingPrice, Validators.required],
-      sellingPrice2: [product.productPrice.sellingPrice2],
-      sellingPrice3: [product.productPrice.sellingPrice3],
-      minSellingPrice: [product.productPrice.minSellingPrice, Validators.required],
-      maxSellingPrice: [product.productPrice.maxSellingPrice, Validators.required],
-      standardRentalPrice: [product.productPrice.standardRentalPrice, Validators.required],
-      rentalPrice2: [product.productPrice.rentalPrice2],
-      rentalPrice3: [product.productPrice.rentalPrice3],
-      minRentalPrice: [product.productPrice.minRentalPrice, Validators.required],
-      maxRentalPrice: [product.productPrice.maxRentalPrice, Validators.required],
-    });
+      productSize: this.fb.group({
+        type: [product.productSize.type, Validators.required],
+        height: [product.productSize.height, Validators.required],
+        length: [product.productSize.length, Validators.required],
+        width: [product.productSize.width, Validators.required],
+        thickness: [product.productSize.thickness, Validators.required],
+        remark: [product.productSize.remark],
+      }),
+      productPrice: this.fb.group({
+        standardPurchaseCost: [product.productPrice.standardPurchaseCost, Validators.required],
+        minPurchaseCost: [product.productPrice.minPurchaseCost, Validators.required],
+        maxPurchaseCost: [product.productPrice.maxPurchaseCost, Validators.required],
+        standardSellingPrice: [product.productPrice.standardSellingPrice, Validators.required],
+        sellingPrice2: [product.productPrice.sellingPrice2],
+        sellingPrice3: [product.productPrice.sellingPrice3],
+        minSellingPrice: [product.productPrice.minSellingPrice, Validators.required],
+        maxSellingPrice: [product.productPrice.maxSellingPrice, Validators.required],
+        standardRentalPrice: [product.productPrice.standardRentalPrice, Validators.required],
+        rentalPrice2: [product.productPrice.rentalPrice2],
+        rentalPrice3: [product.productPrice.rentalPrice3],
+        minRentalPrice: [product.productPrice.minRentalPrice, Validators.required],
+        maxRentalPrice: [product.productPrice.maxRentalPrice, Validators.required],
+      })
+    });    
   }
 
   constructor() {
@@ -97,54 +88,30 @@ export class EditProductComponent {
         filter(params => params.id),
         tap(({ id }) => (this.id = id)),
         switchMap(({ id }) => this.productService.get(id)),
-        tap(driver => this.buildForm(driver))
+        tap(product => {
+          this.buildForm(product);
+          this.setImageUrl(product.id)
+        })
       )
       .subscribe();
   }
+
+  private setImageUrl(id: string): void {
+    this.productService.getImageContent(id).subscribe((imageContent) => {
+      this.imageUrl = 'data:image/png;base64,' + imageContent;
+    });
+  }
   
   save(): void {
-    const formData = new FormData();
-
-    if (this.basicDetailsForm.invalid || this.sizeDetailsForm.invalid || this.priceDetailsForm.invalid) {
+    if (this.productForm.invalid) {
+      const invalidInputs = this.getInvalidInputs(this.productForm).join(', ');
+      this.errorMessages = `The following are required: ${invalidInputs}`;
       return;
     }
 
-    formData.append('code', this.basicDetailsForm.value.code);
-    formData.append('image', this.image);
-    formData.append('nameEn', this.basicDetailsForm.value.nameEn);
-    formData.append('nameCn', this.basicDetailsForm.value.nameCn);
-    formData.append('productGroupId', this.basicDetailsForm.value.productGroupId);
-    formData.append('uom', this.basicDetailsForm.value.uom);
-    formData.append('quantityPa', this.basicDetailsForm.value.quantityPa);
-    formData.append('quantityPr', this.basicDetailsForm.value.quantityPr);
-    formData.append('quantityRu', this.basicDetailsForm.value.quantityRu);
-    formData.append('quantityRn', this.basicDetailsForm.value.quantityRn);
-    formData.append('status', this.basicDetailsForm.value.status);
-    formData.append('location', this.basicDetailsForm.value.location);
-    formData.append('owner', this.basicDetailsForm.value.owner);
+    this.errorMessages = '';
 
-    formData.append('ProductSize.type', this.sizeDetailsForm.value.type);
-    formData.append('ProductSize.height', this.sizeDetailsForm.value.height);
-    formData.append('ProductSize.length', this.sizeDetailsForm.value.length);
-    formData.append('ProductSize.width', this.sizeDetailsForm.value.width);
-    formData.append('ProductSize.thickness', this.sizeDetailsForm.value.thickness);
-    formData.append('ProductSize.remark', this.sizeDetailsForm.value.remark);
-
-    formData.append('ProductPrice.standardPurchaseCost', this.priceDetailsForm.value.standardPurchaseCost);
-    formData.append('ProductPrice.minPurchaseCost', this.priceDetailsForm.value.minPurchaseCost);
-    formData.append('ProductPrice.maxPurchaseCost', this.priceDetailsForm.value.maxPurchaseCost);
-    formData.append('ProductPrice.standardSellingPrice', this.priceDetailsForm.value.standardSellingPrice);
-    formData.append('ProductPrice.sellingPrice2', this.priceDetailsForm.value.sellingPrice2);
-    formData.append('ProductPrice.sellingPrice3', this.priceDetailsForm.value.sellingPrice3);
-    formData.append('ProductPrice.minSellingPrice', this.priceDetailsForm.value.minSellingPrice);
-    formData.append('ProductPrice.maxSellingPrice', this.priceDetailsForm.value.maxSellingPrice);
-    formData.append('ProductPrice.standardRentalPrice', this.priceDetailsForm.value.standardRentalPrice);
-    formData.append('ProductPrice.rentalPrice2', this.priceDetailsForm.value.rentalPrice2);
-    formData.append('ProductPrice.rentalPrice3', this.priceDetailsForm.value.rentalPrice3);
-    formData.append('ProductPrice.minRentalPrice', this.priceDetailsForm.value.minRentalPrice);
-    formData.append('ProductPrice.maxRentalPrice', this.priceDetailsForm.value.maxRentalPrice);
-
-    this.updateProduct(formData).subscribe(() => {
+    this.productService.update(this.id, this.productForm.value).subscribe(() => {
       this.toasterService.success('::Product:EditSuccess');
       this.router.navigate(['/products']);
     });
@@ -157,14 +124,36 @@ export class EditProductComponent {
       return;
     }
     
-    this.image = files[0];
+    const image = files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+      this.productForm.get('imageName').setValue(image.name);
+      const imageUrlString = reader.result as string;
+      console.log(imageUrlString);
+      this.productForm.get('imageContent').setValue(imageUrlString.split(',')[1]);
+    }
+    reader.readAsDataURL(image);
   }
 
-  private updateProduct = (formData: FormData, config?: Partial<Rest.Config>) => 
-    this.restService.request<any, void>({
-      method: 'PUT',
-      url: `/api/app/product/${this.id}`,
-      body: formData,
-    },
-    { apiName: 'Default',...config });
+  private getInvalidInputs(formGroup: FormGroup): string[] {
+    const errorKeys: string[] = [];
+
+    Object.keys(formGroup.controls).forEach(key => {    
+      const control = formGroup.get(key);
+
+      if (control instanceof FormGroup) {
+        const nestedErrors = this.getInvalidInputs(control);
+        if (nestedErrors.length > 0) {
+          errorKeys.push(...nestedErrors);
+        }
+      }
+  
+      if (control.errors !== null) {
+        errorKeys.push(key);
+      }
+    });
+
+    return errorKeys;
+  }
 }

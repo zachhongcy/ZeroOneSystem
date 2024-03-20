@@ -8,7 +8,8 @@ namespace ZeroOneSystem.Drivers.Dto
     public class UpdateDriverDto
     {
         public string DriverNo { get; set; }
-        public IRemoteStreamContent? Image { get; set; }
+        public string? ImageName { get; set; } = string.Empty;
+        public string? ImageContent { get; set; }
         public string DriverName { get; set; }
         public string LicenseNo { get; set; }
         public DateTime LicenseExpiryDate { get; set; }

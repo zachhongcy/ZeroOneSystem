@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,12 @@ namespace ZeroOneSystem.Drivers
 {
     public class DriverAppService : BaseAppService, IDriverAppService
     {
-        private readonly IRepository<Driver, Guid> _driverRepository;
+        private readonly IDriverRepository _driverRepository;
         private readonly IFileService<DriverImageContainer> _fileService;
 
         public DriverAppService(
             IGuidGenerator guidGenerator,
-            IRepository<Driver, Guid> driverRepository,
+            IDriverRepository driverRepository,
             IFileService<DriverImageContainer> fileService) 
             : base(guidGenerator)
         {
@@ -36,7 +37,7 @@ namespace ZeroOneSystem.Drivers
             _fileService = fileService;
         }
 
-        public async Task CreateAsync([FromForm] CreateDriverDro input)
+        public async Task CreateAsync(CreateDriverDto input)
         {
             var isDuplicate = await _driverRepository.AnyAsync(x => x.DriverNo == input.DriverNo);
 
@@ -45,11 +46,11 @@ namespace ZeroOneSystem.Drivers
                 throw new UserFriendlyException("Unable to add Driver: Duplicate item.");
             }
 
-            var imageFileName = string.Empty;
+            var uploadedImageFileName = string.Empty;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
+                uploadedImageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
             }
 
             var driver = Driver.Create(
@@ -67,7 +68,7 @@ namespace ZeroOneSystem.Drivers
                 input.EmergencyRelationship,
                 input.EmergencyContactNo,
                 input.Address,
-                imageFileName);
+                uploadedImageFileName);
 
             await _driverRepository.InsertAsync(driver, true);
         }
@@ -85,12 +86,6 @@ namespace ZeroOneSystem.Drivers
                 input.SkipCount, input.MaxResultCount, input.Sorting);
 
             var driverDtos = ObjectMapper.Map<List<Driver>, List<DriverDto>>(drivers);
-
-            await Task.WhenAll(driverDtos.Select(async x =>
-            {
-                x.ImageContent = await _fileService.GetBase64ContentAsync(x.ImageFileName);
-            }));
-
             return new PagedResultDto<DriverDto>
             {
                 TotalCount = totalCount,
@@ -108,21 +103,16 @@ namespace ZeroOneSystem.Drivers
             return driverDto;
         }
 
-        public async Task UpdateAsync(Guid id, [FromForm] UpdateDriverDto input)
+        public async Task UpdateAsync(Guid id, UpdateDriverDto input)
         {
             var driver = await _driverRepository.GetAsync(x => x.Id == id)
                 ?? throw new EntityNotFoundException(typeof(UpdateDriverDto), id);
 
-            var imageFileName = driver.ImageFileName;
+            var uploadedImageFileName = driver.ImageFileName;
 
-            if (input.Image != null)
+            if (!input.ImageContent.IsNullOrEmpty())
             {
-                imageFileName = await _fileService.UploadAsync(input.Image);
-
-                if (!driver.ImageFileName.IsNullOrEmpty())
-                {
-                    await _fileService.DeleteAsync(driver.ImageFileName);
-                }
+                uploadedImageFileName = await _fileService.UploadAsync(input.ImageName, input.ImageContent);
             }
 
             driver.Update(
@@ -138,7 +128,7 @@ namespace ZeroOneSystem.Drivers
                 input.EmergencyRelationship,
                 input.EmergencyContactNo,
                 input.Address,
-                imageFileName);
+                uploadedImageFileName);
 
             await _driverRepository.UpdateAsync(driver);
         }
@@ -213,12 +203,13 @@ namespace ZeroOneSystem.Drivers
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.DRIVERS_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
         }
 
-        public async Task<string> GenerateDriverNumberAsync()
+        [HttpGet]
+        public async Task<string> GetDriverNoAsync()
         {
             var count = await _driverRepository.CountAsync();
 
@@ -234,6 +225,14 @@ namespace ZeroOneSystem.Drivers
                 .Append(count.ToString("D4"));
 
             return sb.ToString();
+        }
+
+        [HttpGet]
+        public async Task<string> GetImageContentAsync(Guid id)
+        {
+            var driver = await _driverRepository.GetAsync(id);
+
+            return await _fileService.GetBase64ContentAsync(driver.ImageFileName);
         }
     }
 }

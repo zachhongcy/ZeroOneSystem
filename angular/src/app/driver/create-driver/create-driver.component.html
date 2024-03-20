@@ -22,6 +22,9 @@
                 </label>
             </div>
             <div class="col-md-4">
+                <div class="col-md-6">
+                    <img [src]="imageUrl" class="img-fluid" *ngIf="imageUrl" alt="Selected Image">
+                </div>
                 <input type="file" 
                     id="picture" 
                     class="form-control" 
@@ -159,11 +162,11 @@
             </div>
             
             <div class="pt-2">
-                <button type="button" class="btn btn-light m-1 px-2" [routerLink]="['/drivers']">
+                <button type="button" class="btn btn-light mx-3 px-4" [routerLink]="['/drivers']">
                     {{ '::Cancel' | abpLocalization }}
                 </button>
-                <button type="submit" class="btn btn-primary m-1 px-2">
-                    <i class="fa fa-check me-1"></i>
+                <button type="submit" class="btn btn-primary mx-3 px-4">
+                    <i class="fa fa-check me-2"></i>
                     {{ '::Save' | abpLocalization }}
                 </button>
             </div>

@@ -23,32 +23,16 @@ namespace ZeroOneSystem.Common
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<string> UploadAsync(IRemoteStreamContent file)
+        public async Task<string> UploadAsync(string fileName, string fileContent)
         {
-            if (file.FileName.IsNullOrEmpty())
-            {
-                return string.Empty;
-            }
+            var hashedFileName = GenerateHashedFileName(fileName);
 
-            var hashedFileName = GenerateHashedFileName(file.FileName);
+            var contentBytes = Convert.FromBase64String(fileContent);
 
-            var stream = file.GetStream();
-
-            if (stream.Length <= 0)
-            {
-                return string.Empty;
-            }
-
-            await _container.SaveAsync(hashedFileName, stream);
+            using var memoryStream = new MemoryStream(contentBytes);
+            await _container.SaveAsync(hashedFileName, memoryStream);
 
             return hashedFileName;
-        }
-
-        public async Task<byte[]?> GetContentAsync(string fileName)
-        {
-            return fileName.IsNullOrEmpty()
-                ? null
-                : await _container.GetAllBytesOrNullAsync(fileName);
         }
 
         public async Task<string> GetBase64ContentAsync(string fileName)

@@ -70,7 +70,7 @@ export class CreateTripComponent implements OnInit {
   }
 
   generateTripNo(): void {
-    this.tripService.generateTripNumber().subscribe((tripNo) => {
+    this.tripService.getTripNo().subscribe((tripNo) => {
       this.tripNo = tripNo;
     });
   }

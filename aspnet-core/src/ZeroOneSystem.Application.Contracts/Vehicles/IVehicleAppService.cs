@@ -15,5 +15,6 @@ namespace ZeroOneSystem.Vehicles
         Task UpdateAsync(Guid id, UpdateVehicleDto input);
         Task DeleteAsync(Guid id);
         Task<IRemoteStreamContent> ExportAsync();
+        Task<string> GetImageContentAsync(Guid id);
     }
 }

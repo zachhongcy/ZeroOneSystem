@@ -1,4 +1,3 @@
-import { Rest, RestService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -20,18 +19,19 @@ export class EditDriverComponent {
   private readonly fb = inject(FormBuilder);
   private readonly driverService = inject(DriverService);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly restService = inject(RestService);
   private readonly toasterService = inject(ToasterService);
 
   id: string;
   form: FormGroup;
   image: File;
   statuses = statusOptions;
+  imageUrl: string | ArrayBuffer | null = null;
 
   private buildForm(driver: DriverDto): void {
     this.form = this.fb.group({
       driverNo: [driver.driverNo, Validators.required],
-      image: [null],
+      imageName: [''],
+      imageContent: [''],
       driverName: [driver.driverName, Validators.required],
       licenseNo: [driver.licenseNo, Validators.required],
       licenseExpiryDate: [new Date(driver.licenseExpiryDate), Validators.required],
@@ -53,9 +53,18 @@ export class EditDriverComponent {
         filter(params => params.id),
         tap(({ id }) => (this.id = id)),
         switchMap(({ id }) => this.driverService.get(id)),
-        tap(driver => this.buildForm(driver))
+        tap(driver => {
+          this.buildForm(driver);
+          this.setImageUrl(driver.id);
+        })
       )
       .subscribe();
+  }
+
+  private setImageUrl(id: string): void {
+    this.driverService.getImageContent(id).subscribe((imageContent) => {
+      this.imageUrl = 'data:image/png;base64,' + imageContent;
+    });
   }
 
   save(): void {
@@ -63,24 +72,7 @@ export class EditDriverComponent {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append('driverNo', this.form.value.driverNo);
-    formData.append('image', this.image);
-    formData.append('driverName', this.form.value.driverName);
-    formData.append('licenseNo', this.form.value.licenseNo);
-    formData.append('licenseExpiryDate', (new Date(this.form.value.licenseExpiryDate)).toDateString());
-    formData.append('contactNo', this.form.value.contactNo);
-    formData.append('employeeCategory', this.form.value.employeeCategory);
-    formData.append('password', this.form.value.password);
-    formData.append('status', this.form.value.status);
-    formData.append('remark', this.form.value.remark);
-    formData.append('emergencyContactName', this.form.value.emergencyContactName);
-    formData.append('emergencyContactNo', this.form.value.emergencyContactNo);
-    formData.append('emergencyRelationship', this.form.value.emergencyRelationship);
-    formData.append('address', this.form.value.address);
-
-    this.updateDriver(formData).subscribe(() => {
+    this.driverService.update(this.id, this.form.value).subscribe(() => {
       this.toasterService.success('::Driver:EditSuccess');
       this.router.navigate(['/drivers']);
     });
@@ -93,14 +85,14 @@ export class EditDriverComponent {
       return;
     }
     
-    this.image = files[0];
+    const image = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+      this.form.get('imageName').setValue(image.name);
+      const imageUrlString = reader.result as string;
+      this.form.get('imageContent').setValue(imageUrlString.split(',')[1]);
+    }
   }
-
-  private updateDriver = (formData: FormData, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'PUT',
-      url: `/api/app/driver/${this.id}`,
-      body: formData,
-    },
-    { apiName: 'Default',...config });
 }

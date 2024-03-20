@@ -8,17 +8,17 @@
         </div>
         <div class="text-end col col-md-6">
             <div class="text-lg-end pt-2">
-                <button id="create" class="btn btn-primary m-1 px-2" type="button" [routerLink]="['create']">
-                    <i class="fa fa-plus me-1"></i>
-                    <span class="fs-5">{{ "::Create" | abpLocalization }}</span>
+                <button id="create" class="btn btn-primary mx-3 px-4" type="button" [routerLink]="['create']">
+                    <i class="fa fa-plus me-2"></i>
+                    <span class="fs-6">{{ "::Create" | abpLocalization }}</span>
                 </button>
-                <button id="export" class="btn btn-primary m-1 px-2" type="button" (click)="export()">
-                    <i class="fa fa-file-excel-o me-1"></i>
-                    <span class="fs-5">{{ "::Export" | abpLocalization }}</span>
+                <button id="export" class="btn btn-primary mx-3 px-4" type="button" (click)="export()">
+                    <i class="fa fa-file-excel-o me-2"></i>
+                    <span class="fs-6">{{ "::Export" | abpLocalization }}</span>
                 </button>
-                <button id="column-setting" class="btn btn-primary m-1 px-2" type="button" (click)="setColumnsVisibility()">
-                  <i class="fa fa-cog"></i>
-                  <span class="fs-5">{{ '::ShowHideColumns' | abpLocalization }}</span>
+                <button id="column-setting" class="btn btn-primary mx-3 px-4" type="button" (click)="setColumnsVisibility()">
+                  <i class="fa fa-cog me-2"></i>
+                  <span class="fs-6">{{ '::ShowHideColumns' | abpLocalization }}</span>
                 </button>
             </div>
         </div>
@@ -32,33 +32,43 @@
         [limit]="10" default>
         <ngx-datatable-column
           [name]="'::Actions' | abpLocalization"
-          [width]="100"
-          [maxWidth]="100"
+          [maxWidth]="150"
           [sortable]="false"
           [frozenLeft]="true">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <button 
-              mat-icon-button
-              [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item [routerLink]="['edit', row.id]">
-                {{ '::Edit' | abpLocalization }}
+            <div ngbDropdown container="body" class="d-inline-block">
+              <button
+                class="btn btn-primary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                ngbDropdownToggle
+              >
+                <i class="fa fa-cog me-1"></i>{{ '::Actions' | abpLocalization }}
               </button>
-              <button mat-menu-item (click)="delete(row.id)">
-                {{ '::Delete' | abpLocalization }}
-              </button>
-            </mat-menu>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem [routerLink]="['edit', row.id]">
+                  {{ '::Edit' | abpLocalization }}
+                </button>
+                <button ngbDropdownItem (click)="delete(row.id)">
+                  {{ '::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
           </ng-template>
         </ngx-datatable-column>
         <ng-container *ngFor="let column of columns">
-          <ngx-datatable-column [name]="column.name | abpLocalization" [prop]="column.prop" *ngIf="column.visible">
-            <ng-template let-value="value" ngx-datatable-cell-template>
+          <ngx-datatable-column 
+            [name]="column.name | abpLocalization" 
+            [prop]="column.prop" 
+            [sortable]="column.sortable"
+            *ngIf="column.visible">
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
               <app-datatable-cell 
                 [template]="column.template" 
                 [value]="value"
-                [enumName]="column.enumName"></app-datatable-cell>
+                [enumName]="column.enumName"
+                [source]="column.source"
+                [id]="row.id"></app-datatable-cell>
             </ng-template>
           </ngx-datatable-column>
         </ng-container>
@@ -66,7 +76,7 @@
     </div>
 </div>
 
-<abp-modal #columnVisibilityModal [(visible)]="isColumnVisibilityModalOpen" [suppressUnsavedChangesWarning]="true">
+<abp-modal #columnVisibilityModal [(visible)]="isColumnVisibilityModalOpen" [suppressUnsavedChangesWarning]="true" [options]="{ keyboard: true }">
   <ng-template #abpHeader>
     <h1 class="display-1">{{ '::ShowHideColumns' | abpLocalization }}</h1>
   </ng-template>
@@ -81,7 +91,7 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-light m-1 px-2" abpClose>
+    <button type="button" class="btn btn-light mx-3 px-4" abpClose>
       {{ '::Close' | abpLocalization }}
     </button>
   </ng-template>

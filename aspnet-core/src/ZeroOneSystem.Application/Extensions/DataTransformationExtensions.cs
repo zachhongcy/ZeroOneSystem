@@ -30,7 +30,7 @@ namespace ZeroOneSystem.Extensions
             return dateTime.ToString(ExportConstants.DATETIME_FORMAT);
         }
 
-        public static string ToExcelTimestampString(this DateTime dateTime)
+        public static string ToTimestampString(this DateTime dateTime)
         {
             return dateTime.ToString(ExportConstants.TIMESTAMP_FORMAT);
         }

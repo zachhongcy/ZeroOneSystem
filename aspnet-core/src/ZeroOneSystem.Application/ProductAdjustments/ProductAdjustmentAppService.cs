@@ -188,12 +188,12 @@ namespace ZeroOneSystem.ProductAdjustments
             memoryStream.Position = 0;
 
             var sb = new StringBuilder(ExportConstants.PRODUCT_ADJUSTMENTS_PREFIX)
-                .Append(DateTime.Now.ToExcelTimestampString());
+                .Append(DateTime.Now.ToTimestampString());
 
             return new RemoteStreamContent(memoryStream, sb.ToString(), ExportConstants.CONTENT_TYPE);
         }
 
-        public async Task<string> GenerateDocumentNoAsync()
+        public async Task<string> GetDocumentNoAsync()
         {
             var count = await _productAdjustmentRepository.CountAsync();
 

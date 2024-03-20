@@ -2,10 +2,10 @@ import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@ab
 import { Component, OnInit } from '@angular/core';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { TripDto } from '@proxy/trips/dto';
-import { CellTemplate } from '../shared/components/datatable-cell/cell-template.enum';
 import { TripService } from '@proxy/trips';
 import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { DatePipe } from '@angular/common';
+import { TripColumns } from '../shared/models/column';
 
 @Component({
   selector: 'app-trip',
@@ -19,39 +19,7 @@ import { DatePipe } from '@angular/common';
 export class TripComponent implements OnInit {
   trips = { items: [], totalCount: 0 } as PagedResultDto<TripDto>;
   isColumnVisibilityModalOpen = false;
-
-  columns = [
-    { prop: 'tripNo', name: '::Trip:Number', visible: true },
-    { prop: 'tripDate', name: '::Trip:Date', visible: true, template: CellTemplate.Date },
-    { 
-      prop: 'tripStatus', 
-      name: '::Trip:Status', 
-      visible: true, 
-      enumName: '::Trip:EnumStatus.',
-      template: CellTemplate.Enum 
-    },
-    { 
-      prop: 'tripType', 
-      name: '::Trip:Type', 
-      visible: true, 
-      enumName: '::Trip:EnumType.',
-      template: CellTemplate.Enum 
-    },
-    { prop: 'customerName', name: '::Trip:CustomerName', visible: true },
-    { prop: 'referDocNo', name: '::Trip:ReferDocNo', visible: true },
-    { 
-      prop: 'priority', 
-      name: '::Trip:Priority', 
-      visible: true, 
-      enumName: '::Trip:EnumPriority.',
-      template: CellTemplate.Enum 
-    },
-    { prop: 'siteDetails', name: '::Trip:SiteDetails', visible: true, template: CellTemplate.Multiline },
-    { prop: 'driverName', name: '::Trip:Driver', visible: true },
-    { prop: 'vehiclePlate', name: '::Trip:Vehicle', visible: true },
-    { prop: 'remark', name: '::Trip:Remark', visible: true },
-    { prop: 'creationTime', name: '::Common:CreationTime', visible: true, template: CellTemplate.DateTime },
-  ];
+  columns = TripColumns;
 
   constructor(
     public readonly list: ListService,
@@ -86,7 +54,7 @@ export class TripComponent implements OnInit {
       const link = document.createElement('a');
       const url = window.URL.createObjectURL(file);
       link.href = url;
-      link.download = 'VehiclesExport_' + this.datePipe.transform(new Date(), 'yyyyMMddHHmmss') + '.xlsx';
+      link.download = 'TripsExport_' + this.datePipe.transform(new Date(), 'yyyyMMddHHmmss') + '.xlsx';
       link.click();
       window.URL.revokeObjectURL(url);
       this.toasterService.success('::Trip:ExportSuccess');

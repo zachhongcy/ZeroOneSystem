@@ -33,6 +33,7 @@ export interface TripDto extends CreationAuditedEntityDto<string> {
   remark?: string;
   siteName?: string;
   siteDetails?: string;
+  siteDetail: SiteDetail;
   siteAddress?: string;
   contactPerson?: string;
   contactNo?: string;

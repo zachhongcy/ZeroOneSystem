@@ -8,8 +8,6 @@ namespace ZeroOneSystem.Products.Dto
     public class ProductDto : CreationAuditedEntityDto<Guid>
     {
         public string Code { get; set; }
-        public string ImageFileName { get; set; }
-        public string ImageContent { get; set; }
         public string NameEn { get; set; }
         public string NameCn { get; set; }
         public string ProductGroupCodeName { get; set; }
@@ -23,5 +21,8 @@ namespace ZeroOneSystem.Products.Dto
         public Status Status { get; set; }
         public string Owner { get; set; }
         public Guid ProductGroupId { get; set; }
+
+        public ProductSizeDto ProductSize { get; set; }
+        public ProductPriceDto ProductPrice { get; set; }
     }
 }
