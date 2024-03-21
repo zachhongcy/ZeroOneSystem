@@ -38,23 +38,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: ABP Setup
+      - name: Install Yarn
+        run: npm install yarn -g --silent
+
+      - name: Install ABP CLI
         run: |
-          echo "Handling ABP Libs install."
+            dotnet tool install -g Volo.Abp.Cli
+            export PATH="$HOME/.dotnet/tools:$PATH"
 
-          # Install Yarn
-          echo "Installing Yarn"
-          npm install yarn -g --silent
-
-          # Install ABP CLI
-          echo "Installing ABP CLI"
-          dotnet tool update -g Volo.Abp.Cli --prerelease
-          export PATH="$HOME/.dotnet/tools:$PATH" # Add .NET tools to the PATH
-
-          # Install ABP Libs
-          echo "Installing ABP Libs"
-          abp install-libs -wd "${{ env.DEPLOYMENT_SOURCE }}/src/ZeroOneSystem.HttpApi.Host"
-        shell: bash
+      - name: Install ABP Libs
+        run: abp install-libs
+        working-directory: ./aspnet-core/src/ZeroOneSystem.HttpApi.Host
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
