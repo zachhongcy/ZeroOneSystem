@@ -11,6 +11,9 @@
     "lint": "ng lint"
   },
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@abp/ng.account": "~8.0.0",
     "@abp/ng.components": "~8.0.0",
