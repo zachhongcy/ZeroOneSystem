@@ -10,9 +10,9 @@ namespace ZeroOneSystem.ProductGroups
 {
     public class ProductGroup : FullAuditedEntity<Guid>
     {
-        public string Name { get; protected set; }
-        public string ShortCode { get; protected set; }
-        public string Description { get; protected set; }
+        public string Name { get; protected set; } = string.Empty;
+        public string ShortCode { get; protected set; } = string.Empty;
+        public string Description { get; protected set; } = string.Empty;
         public Status Status { get; protected set; }
         public bool IsForSales { get; protected set; }
 

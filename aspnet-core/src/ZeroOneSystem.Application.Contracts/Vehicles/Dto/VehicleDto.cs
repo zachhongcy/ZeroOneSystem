@@ -8,11 +8,11 @@ namespace ZeroOneSystem.Vehicles.Dto
     public class VehicleDto : CreationAuditedEntityDto<Guid>
     {
         public VehicleType VehicleType { get; set; }
-        public string VehiclePlate { get; set; }
-        public string VehicleModel { get; set; }
+        public string VehiclePlate { get; set; } = string.Empty;
+        public string VehicleModel { get; set; } = string.Empty;
         public DateTime RoadTaxExpiryDate { get; set; }
         public DateTime ServiceDate { get; set; }
         public Status Status { get; set; }
-        public string Remark { get; set; }
+        public string Remark { get; set; } = string.Empty;
     }
 }

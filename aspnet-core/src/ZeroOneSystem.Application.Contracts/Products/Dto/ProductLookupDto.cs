@@ -5,6 +5,6 @@ namespace ZeroOneSystem.Products.Dto
 {
     public class ProductLookupDto : EntityDto<Guid>
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

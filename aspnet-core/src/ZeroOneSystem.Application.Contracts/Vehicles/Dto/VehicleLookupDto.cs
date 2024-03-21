@@ -5,6 +5,6 @@ namespace ZeroOneSystem.Vehicles.Dto
 {
     public class VehicleLookupDto : EntityDto<Guid>
     {
-        public string VehiclePlate { get; set; }
+        public string VehiclePlate { get; set; } = string.Empty;
     }
 }

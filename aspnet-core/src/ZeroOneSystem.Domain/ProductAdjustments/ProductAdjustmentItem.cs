@@ -6,8 +6,8 @@ namespace ZeroOneSystem.ProductAdjustments
 {
     public class ProductAdjustmentItem
     {
-        public string ItemCode { get; protected set; }
-        public string Description { get; protected set; }
+        public string ItemCode { get; protected set; } = string.Empty;
+        public string Description { get; protected set; } = string.Empty;
         public Uom Uom { get; protected set; }
         public int Quantity { get; protected set; }
         public decimal UnitCost { get; protected set; }

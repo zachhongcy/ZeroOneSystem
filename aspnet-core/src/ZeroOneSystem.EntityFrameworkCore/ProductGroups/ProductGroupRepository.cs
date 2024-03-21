@@ -16,7 +16,7 @@ namespace ZeroOneSystem.ProductGroups
         public ProductGroupRepository(IDbContextProvider<ZeroOneSystemDbContext> dbContextProvider) 
             : base(dbContextProvider) { }
 
-        public async Task<List<ProductGroup>> GetListAsync(int skipCount, int maxResultCount, string sorting = "Name", string? filter = null)
+        public async Task<List<ProductGroup>> GetListAsync(int skipCount, int maxResultCount, string sorting = nameof(ProductGroup.Name), string? filter = null)
         {
             var dbSet = await GetDbSetAsync();
 

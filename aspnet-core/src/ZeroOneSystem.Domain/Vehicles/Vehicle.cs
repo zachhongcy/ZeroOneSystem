@@ -11,13 +11,13 @@ namespace ZeroOneSystem.Vehicles
     public class Vehicle : FullAuditedEntity<Guid>
     {
         public VehicleType VehicleType { get; protected set; }
-        public string ImageFileName { get; protected set; }
-        public string VehiclePlate { get; protected set; }
-        public string VehicleModel { get; protected set; }
+        public string ImageFileName { get; protected set; } = string.Empty;
+        public string VehiclePlate { get; protected set; } = string.Empty;
+        public string VehicleModel { get; protected set; } = string.Empty;
         public DateTime RoadTaxExpiryDate { get; protected set; }
         public DateTime ServiceDate { get; protected set; }
         public Status Status { get; protected set; }
-        public string Remark { get; protected set; }
+        public string Remark { get; protected set; } = string.Empty;
 
         public ICollection<Trip> Trips { get; protected set; }
 

@@ -6,7 +6,7 @@ namespace ZeroOneSystem.ProductAdjustments.Dto
     [Serializable]
     public class ProductAdjustmentItemDto
     {
-        public string ItemCode { get; set; }
+        public string ItemCode { get; set; } = string.Empty;
         public string? Description { get; set; }
         public Uom Uom { get; set; }
         public int Quantity { get; set; }

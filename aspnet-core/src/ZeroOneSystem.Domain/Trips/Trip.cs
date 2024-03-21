@@ -9,19 +9,19 @@ namespace ZeroOneSystem.Trips
 {
     public class Trip : FullAuditedEntity<Guid>
     {
-        public string TripNo { get; protected set; }
+        public string TripNo { get; protected set; } = string.Empty;
         public TripType TripType { get; protected set; }
         public DateTime TripDate { get; protected set; }
         public TripStatus TripStatus { get; protected set; }
-        public string CustomerName { get; protected set; }
+        public string CustomerName { get; protected set; } = string.Empty;
         public int ReferDocNo { get; protected set; }
         public TripPriority Priority { get; protected set; }
-        public string SiteName { get; protected set; }
+        public string SiteName { get; protected set; } = string.Empty;
         public SiteDetail SiteDetail { get; protected set; }
-        public string SiteAddress { get; protected set; }
-        public string ContactPerson { get; protected set; }
-        public string ContactNo { get; protected set; }
-        public string Remark { get; protected set; }
+        public string SiteAddress { get; protected set; } = string.Empty;
+        public string ContactPerson { get; protected set; } = string.Empty;
+        public string ContactNo { get; protected set; } = string.Empty;
+        public string Remark { get; protected set; } = string.Empty;
         public Guid DriverId { get; protected set; }
         public Guid VehicleId { get; protected set; }
 

@@ -8,18 +8,18 @@ namespace ZeroOneSystem.Products
 {
     public class Product : FullAuditedAggregateRoot<Guid>
     {
-        public string Code { get; protected set; }
-        public string ImageFileName { get; protected set; }
-        public string NameEn { get; protected set; }
-        public string NameCn { get; protected set; }
+        public string Code { get; protected set; } = string.Empty;
+        public string ImageFileName { get; protected set; } = string.Empty;
+        public string NameEn { get; protected set; } = string.Empty;
+        public string NameCn { get; protected set; } = string.Empty;
         public Uom Uom { get; protected set; }
         public int QuantityPr { get; protected set; }
         public int QuantityPa { get; protected set; }
         public int QuantityRu { get; protected set; }
         public int QuantityRn { get; protected set; }
         public Status Status { get; protected set; }
-        public string Location { get; protected set; }
-        public string Owner { get; protected set; }
+        public string Location { get; protected set; } = string.Empty;
+        public string Owner { get; protected set; } = string.Empty;
         public Guid ProductGroupId { get; protected set; }
         public ProductSize ProductSize { get; protected set; }
         public ProductPrice ProductPrice { get; protected set; }

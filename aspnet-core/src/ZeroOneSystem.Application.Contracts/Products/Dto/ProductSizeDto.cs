@@ -5,7 +5,7 @@ namespace ZeroOneSystem.Products.Dto
     [Serializable]
     public class ProductSizeDto
     {
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
         public decimal Height { get; set; }
         public decimal Length { get; set; }
         public decimal Width { get; set; }

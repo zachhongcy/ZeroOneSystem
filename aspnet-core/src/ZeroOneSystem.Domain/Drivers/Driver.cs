@@ -10,20 +10,20 @@ namespace ZeroOneSystem.Drivers
 {
     public class Driver : FullAuditedEntity<Guid>
     {
-        public string DriverNo { get; protected set; }
-        public string DriverName { get; protected set; }
-        public string LicenseNo { get; protected set; }
+        public string DriverNo { get; protected set; } = string.Empty;
+        public string DriverName { get; protected set; } = string.Empty;
+        public string LicenseNo { get; protected set; } = string.Empty;
         public DateTime LicenseExpiryDate { get; protected set; }
-        public string ContactNo { get; protected set; }
+        public string ContactNo { get; protected set; } = string.Empty;
         public int EmployeeCategory { get; protected set; }
-        public string Password { get; protected set; }
+        public string Password { get; protected set; } = string.Empty;
         public Status Status { get; protected set; }
-        public string Remark { get; protected set; }
-        public string EmergencyContactName { get; protected set; }
-        public string EmergencyRelationship { get; protected set; }
-        public string EmergencyContactNo { get; protected set; }
-        public string Address { get; protected set; }
-        public string ImageFileName { get; protected set; }
+        public string Remark { get; protected set; } = string.Empty;
+        public string EmergencyContactName { get; protected set; } = string.Empty;
+        public string EmergencyRelationship { get; protected set; } = string.Empty;
+        public string EmergencyContactNo { get; protected set; } = string.Empty;
+        public string Address { get; protected set; } = string.Empty;
+        public string ImageFileName { get; protected set; } = string.Empty;
 
         public ICollection<Trip> Trips { get; protected set; }
 

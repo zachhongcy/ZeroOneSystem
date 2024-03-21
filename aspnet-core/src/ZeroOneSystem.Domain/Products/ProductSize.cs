@@ -5,12 +5,12 @@ namespace ZeroOneSystem.Products
 {
     public class ProductSize
     {
-        public string Type { get; protected set; }
+        public string Type { get; protected set; } = string.Empty;
         public decimal Height { get; protected set; }
         public decimal Length { get; protected set; }
         public decimal Width { get; protected set; }
         public decimal Thickness { get; protected set; }
-        public string Remark { get; protected set; }
+        public string Remark { get; protected set; } = string.Empty;
 
         protected ProductSize() { }
 

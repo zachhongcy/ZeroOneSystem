@@ -10,10 +10,10 @@ namespace ZeroOneSystem.ProductAdjustments
 {
     public class ProductAdjustment : FullAuditedAggregateRoot<Guid>
     {
-        public string DocumentNo { get; protected set; }
+        public string DocumentNo { get; protected set; } = string.Empty;
         public DateTime DocumentDate { get; protected set; }
-        public string Description { get; protected set; }
-        public ICollection<ProductAdjustmentItem> ProductAdjustmentItems { get; protected set; }
+        public string Description { get; protected set; } = string.Empty;
+        public ICollection<ProductAdjustmentItem> ProductAdjustmentItems { get; protected set; } = [];
 
         protected ProductAdjustment() { }
 
