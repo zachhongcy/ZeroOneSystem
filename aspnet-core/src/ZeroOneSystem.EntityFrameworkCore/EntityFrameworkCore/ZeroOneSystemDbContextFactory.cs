@@ -13,14 +13,14 @@ public class ZeroOneSystemDbContextFactory : IDesignTimeDbContextFactory<ZeroOne
     public ZeroOneSystemDbContext CreateDbContext(string[] args)
     {
         // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         ZeroOneSystemEfCoreEntityExtensionMappings.Configure();
 
         var configuration = BuildConfiguration();
 
         var builder = new DbContextOptionsBuilder<ZeroOneSystemDbContext>()
-            .UseNpgsql(configuration.GetConnectionString("Default"));
+            .UseSqlServer(configuration.GetConnectionString("Default"));
 
         return new ZeroOneSystemDbContext(builder.Options);
     }

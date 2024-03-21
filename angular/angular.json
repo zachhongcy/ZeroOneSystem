@@ -150,6 +150,27 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "staging": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "2.5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
@@ -159,6 +180,9 @@
           "configurations": {
             "production": {
               "buildTarget": "ZeroOneSystem:build:production"
+            },
+            "staging": {
+              "buildTarget": "ZeroOneSystem:build:staging"
             },
             "development": {
               "buildTarget": "ZeroOneSystem:build:development"

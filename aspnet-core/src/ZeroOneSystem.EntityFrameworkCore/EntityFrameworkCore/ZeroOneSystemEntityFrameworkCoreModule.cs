@@ -32,7 +32,7 @@ public class ZeroOneSystemEntityFrameworkCoreModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         ZeroOneSystemEfCoreEntityExtensionMappings.Configure();
     }
@@ -50,7 +50,7 @@ public class ZeroOneSystemEntityFrameworkCoreModule : AbpModule
         {
                 /* The main point to change your DBMS.
                  * See also ZeroOneSystemMigrationsDbContextFactory for EF Core tooling. */
-            options.UseNpgsql();
+            options.UseSqlServer();
         });
 
     }

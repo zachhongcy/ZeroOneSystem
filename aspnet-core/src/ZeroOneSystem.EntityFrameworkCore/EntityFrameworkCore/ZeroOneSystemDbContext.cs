@@ -97,4 +97,12 @@ public class ZeroOneSystemDbContext :
         //    //...
         //});
     }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<decimal>()
+            .HavePrecision(10, 2);
+
+        base.ConfigureConventions(configurationBuilder);
+    }
 }
