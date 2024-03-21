@@ -1,0 +1,108 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core with Angular app to Azure Web App
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: windows-latest
+    steps:
+      - name: Delete Old Artifacts
+        uses: actions/github-script@v6
+        id: artifact
+        with:
+          script: |
+            const res = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+    
+            res.data.artifacts
+              .forEach(({ id }) => {
+                github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: id,
+                })
+              })
+
+  build-backend:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+        working-directory: ./aspnet-core
+
+      - name: Run migrations
+        run: dotnet run -- "${{ secrets.STAGING_SQL_CONN_STRING }}"
+        working-directory: ./aspnet-core/src/ZeroOneSystem.DbMigrator # Replace with your project name
+
+      - name: dotnet publish apihost
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
+        working-directory: ./aspnet-core/src/ZeroOneSystem.HttpApi.Host # Replace with your project name
+
+      - name: Generate authserver.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 85D2BC1B-EACA-4188-B542-9E043F59EA32 # Replace with your password
+
+      - name: Upload artifact for apihost
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-apihost
+          path: ${{env.DOTNET_ROOT}}/apihost
+
+  deploy-backend:
+    runs-on: windows-latest
+    needs: build-backend
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp-1.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from apihost
+        uses: actions/download-artifact@v1
+        with:
+          name: .net-apihost
+          path: ./apihost
+
+      - name: Deploy apihost
+        id: deploy-to-webapp-1
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'zeroonesystem-staging-api' # Replace with your app name
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.STAGING_API_PUBLISH_PROFILE }} # Set your Azure Web App to publish your profile as a secret in your repository settings
+          path: ./apihost
+
+  build-deploy-frontend:
+    runs-on: windows-latest
+    needs: deploy-backend
+    name: Build and Deploy Angular App
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.STAGING_UI_DEPLOYMENT_TOKEN }} # Set your Azure Static Web App API token as a secret in your repository settings
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (eg: PR comments)
+          action: "upload"
+          app_location: "angular" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: "dist/AzureAppsAngular" # Built app content directory - optional
