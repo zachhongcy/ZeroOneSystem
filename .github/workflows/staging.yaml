@@ -38,6 +38,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: ABP Setup
+        run: |
+          echo "Handling ABP Libs install."
+
+          # Install Yarn
+          echo "Installing Yarn"
+          npm install yarn -g --silent
+
+          # Install ABP CLI
+          echo "Installing ABP CLI"
+          dotnet tool update -g Volo.Abp.Cli --prerelease
+          export PATH="$HOME/.dotnet/tools:$PATH" # Add .NET tools to the PATH
+
+          # Install ABP Libs
+          echo "Installing ABP Libs"
+          abp install-libs -wd "${{ env.DEPLOYMENT_SOURCE }}/src/ZeroOneSystem.HttpApi.Host"
+        shell: bash
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -53,17 +71,17 @@ jobs:
         working-directory: ./aspnet-core/src/ZeroOneSystem.DbMigrator # Replace with your project name
 
       - name: dotnet publish apihost
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}
         working-directory: ./aspnet-core/src/ZeroOneSystem.HttpApi.Host # Replace with your project name
 
       - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 85D2BC1B-EACA-4188-B542-9E043F59EA32 # Replace with your password
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver.pfx -p 85D2BC1B-EACA-4188-B542-9E043F59EA32 # Replace with your password
 
       - name: Upload artifact for apihost
         uses: actions/upload-artifact@v2
         with:
           name: .net-apihost
-          path: ${{env.DOTNET_ROOT}}/apihost
+          path: ${{env.DOTNET_ROOT}}
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -77,7 +95,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: .net-apihost
-          path: ./apihost
+          path: .
 
       - name: Deploy apihost
         id: deploy-to-webapp-1
@@ -86,7 +104,7 @@ jobs:
           app-name: 'zeroonesystem-staging-api' # Replace with your app name
           slot-name: 'Production'
           publish-profile: ${{ secrets.STAGING_API_PUBLISH_PROFILE }} # Set your Azure Web App to publish your profile as a secret in your repository settings
-          path: ./apihost
+          path: .
 
   build-deploy-frontend:
     runs-on: ubuntu-latest
