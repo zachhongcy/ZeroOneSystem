@@ -6,6 +6,7 @@ import {
   FormControl,
   Input,
   KeyboardAvoidingView,
+  ScrollView,
   Select,
   Stack
 } from 'native-base';
@@ -63,11 +64,13 @@ function CreateUpdateProductGroupForm({ editingProductGroup = {}, submit, remove
     <>
       <KeyboardAvoidingView
         h={{
-          base: '400px',
+          base: '90%',
           lg: 'auto',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
+        <ScrollView>
+          
         <Box w={{ base: '100%' }} px="4">
             <>
               <FormControl isRequired my="2">
@@ -163,6 +166,7 @@ function CreateUpdateProductGroupForm({ editingProductGroup = {}, submit, remove
               </FormControl>
             </>
         </Box>
+        </ScrollView>
       </KeyboardAvoidingView>
       <FormButtons
         submit={formik.handleSubmit}

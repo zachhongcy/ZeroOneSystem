@@ -74,6 +74,12 @@ function CreateUpdateDriverForm({ editingDriver = {}, submit, remove }) {
     getDriverNo().then((driverNo) => {
       setDriverNo(driverNo);
     });
+
+    if (editingDriver.licenseExpiryDate) {
+      setSelectedDate(new Date(editingDriver.licenseExpiryDate));
+    } else {
+      setSelectedDate(new Date());
+    }
   }, []); 
 
   const Status = {
@@ -147,7 +153,7 @@ function CreateUpdateDriverForm({ editingDriver = {}, submit, remove }) {
     <>
       <KeyboardAvoidingView
         h={{
-          base: '800px',
+          base: '90%',
           lg: 'auto',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

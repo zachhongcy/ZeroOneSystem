@@ -217,7 +217,7 @@ function CreateUpdateProductForm({ editingProduct = {}, submit, remove }) {
     <>
       <KeyboardAvoidingView
         h={{
-          base: '800px',
+          base: '90%',
           lg: 'auto',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

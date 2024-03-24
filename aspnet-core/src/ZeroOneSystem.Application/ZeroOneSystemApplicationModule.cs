@@ -10,6 +10,7 @@ using Volo.Abp.BlobStoring.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BlobStoring;
 using ZeroOneSystem.Common;
+using Volo.Abp;
 
 namespace ZeroOneSystem;
 
@@ -35,13 +36,22 @@ namespace ZeroOneSystem;
 
         context.Services.AddSingleton(typeof(IFileService<>), typeof(FileService<>));
 
+        var hostingEnvironment = context.Services.GetAbpHostEnvironment();
+
         Configure<AbpBlobStoringOptions>(options =>
         {
             options.Containers.ConfigureDefault(container =>
             {
                 container.UseFileSystem(fs =>
                 {
-                    fs.BasePath = "C:\\ZeroOneSystem";
+                    if (hostingEnvironment.IsDevelopment())
+                    {
+                        fs.BasePath = "C:\\ZeroOneSystem";
+                    }
+                    else
+                    {
+                        fs.BasePath = "\\ZeroOneSystem";
+                    }
                 });
             });
         });

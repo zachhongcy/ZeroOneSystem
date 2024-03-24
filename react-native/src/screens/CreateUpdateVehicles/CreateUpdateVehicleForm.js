@@ -57,8 +57,18 @@ function CreateUpdateVehicleForm({ editingVehicle = {}, submit, remove }) {
       })
     }
 
-    setSelectedRoadTaxDate(new Date(editingVehicle.roadTaxExpiryDate));
-    setSelectedServiceDate(new Date(editingVehicle.serviceDate));
+    if (editingVehicle.roadTaxExpiryDate) {
+      setSelectedRoadTaxDate(new Date(editingVehicle.roadTaxExpiryDate));
+    }
+    else {
+      setSelectedRoadTaxDate(new Date());
+    }
+
+    if (editingVehicle.serviceDate) {
+      setSelectedServiceDate(new Date(editingVehicle.serviceDate));
+    } else {
+      setSelectedServiceDate(new Date());
+    }
   }, []); 
 
   const Status = {
@@ -149,204 +159,203 @@ function CreateUpdateVehicleForm({ editingVehicle = {}, submit, remove }) {
 
   return (
     <>
-      <KeyboardAvoidingView
+    <KeyboardAvoidingView
         h={{
-          base: '800px',
+          base: '90%',
           lg: 'auto',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView>
-        <Box w={{ base: '100%' }} px="4">
-            <>
-
-                <FormControl isRequired my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:Type')}
-                    </FormControl.Label>
-                    <Select
-                    mode="dropdown"
-                    onValueChange={handleVehicleTypeChange}
-                    selectedValue={formik.values.vehicleType}
-                    placeHolder="::Vehicle:SelectType">
-                    {vehicleTypes.map(type => (
-                        <Select.Item
-                        label={i18n.t('::Vehicle:EnumType.' + type.value)}
-                        value={type.value}
-                        key={type.key}
-                        />
-                    ))}
-                    </Select>
-                    <ValidationMessage>{formik.errors.vehicleType}</ValidationMessage>
-                </Stack>
-                </FormControl>
-
-              <FormControl my="2">
-                <Stack mx="4">
+      <Box w={{ base: '100%' }} px="4">
+          <>
+              <FormControl isRequired my="2">
+              <Stack mx="4">
                   <FormControl.Label>
-                    {i18n.t('::Vehicle:Picture')}
+                  {i18n.t('::Vehicle:Type')}
                   </FormControl.Label>
-                  <Button onPress={() => setShowImagePicker(true)}>
-                    {"Upload Image"}
-                  </Button>
-                  <Modal
-                    isOpen={showImagePicker}
-                    onClose={() => setShowImagePicker(false)}
-                    onBackdropPress={() => setShowImagePicker(false)}
-                    size="sm"
-                  >
-                    <Modal.Content maxWidth="350">
-                      <Modal.Header>
-                        Upload Image
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Pressable
-                          style={styles.button}
-                          onPress={onImageGalleryPress}
-                        >
-                          <Icon as={Ionicons} name={'image'} style={styles.icon} />
-                          <Text style={styles.text}>Gallery</Text>
-                        </Pressable>
-                        <Pressable
-                          style={styles.button}
-                          onPress={onCameraPress}
-                        >
-                          <Icon as={Ionicons} name={'camera'} style={styles.icon} />
-                          <Text style={styles.imageChangeText}>Camera</Text>
-                        </Pressable>
-                      </Modal.Body>
-                    </Modal.Content>
-                  </Modal>
-                  {selectedImage && 
-                    <Image
-                    source={{ uri: selectedImage }}
-                    alt={i18n.t('::Vehicle:Picture')}
-                    style={{ width: 200, height: 200, marginBottom: 20 }}>
-                    </Image>}
-                </Stack>
+                  <Select
+                  mode="dropdown"
+                  onValueChange={handleVehicleTypeChange}
+                  selectedValue={formik.values.vehicleType}
+                  placeHolder="::Vehicle:SelectType">
+                  {vehicleTypes.map(type => (
+                      <Select.Item
+                      label={i18n.t('::Vehicle:EnumType.' + type.value)}
+                      value={type.value}
+                      key={type.key}
+                      />
+                  ))}
+                  </Select>
+                  <ValidationMessage>{formik.errors.vehicleType}</ValidationMessage>
+              </Stack>
+              </FormControl>
+
+            <FormControl my="2">
+              <Stack mx="4">
+                <FormControl.Label>
+                  {i18n.t('::Vehicle:Picture')}
+                </FormControl.Label>
+                <Button onPress={() => setShowImagePicker(true)}>
+                  {"Upload Image"}
+                </Button>
+                <Modal
+                  isOpen={showImagePicker}
+                  onClose={() => setShowImagePicker(false)}
+                  onBackdropPress={() => setShowImagePicker(false)}
+                  size="sm"
+                >
+                  <Modal.Content maxWidth="350">
+                    <Modal.Header>
+                      Upload Image
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Pressable
+                        style={styles.button}
+                        onPress={onImageGalleryPress}
+                      >
+                        <Icon as={Ionicons} name={'image'} style={styles.icon} />
+                        <Text style={styles.text}>Gallery</Text>
+                      </Pressable>
+                      <Pressable
+                        style={styles.button}
+                        onPress={onCameraPress}
+                      >
+                        <Icon as={Ionicons} name={'camera'} style={styles.icon} />
+                        <Text style={styles.imageChangeText}>Camera</Text>
+                      </Pressable>
+                    </Modal.Body>
+                  </Modal.Content>
+                </Modal>
+                {selectedImage && 
+                  <Image
+                  source={{ uri: selectedImage }}
+                  alt={i18n.t('::Vehicle:Picture')}
+                  style={{ width: 200, height: 200, marginBottom: 20 }}>
+                  </Image>}
+              </Stack>
+            </FormControl>
+
+            <FormControl isRequired my="2">
+              <Stack mx="4">
+                <FormControl.Label>
+                  {i18n.t('::Vehicle:Plate')}
+                </FormControl.Label>
+                <Input
+                  ref={vehiclePlateRef}
+                  onSubmitEditing={() => vehicleModelRef.current.focus()}
+                  returnKeyType="next"
+                  onChangeText={formik.handleChange('vehiclePlate')}
+                  onBlur={formik.handleBlur('vehiclePlate')}
+                  value={formik.values.vehiclePlate}
+                />
+                <ValidationMessage>
+                  {formik.errors.vehiclePlate}
+                </ValidationMessage>
+              </Stack>
+            </FormControl>
+
+              <FormControl isRequired my="2">
+              <Stack mx="4">
+                  <FormControl.Label>
+                  {i18n.t('::Vehicle:Model')}
+                  </FormControl.Label>
+                  <Input
+                  ref={vehicleModelRef}
+                  returnKeyType="next"
+                  onChangeText={formik.handleChange('vehicleModel')}
+                  onBlur={formik.handleBlur('vehicleModel')}
+                  value={formik.values.vehicleModel}
+                  />
+                  <ValidationMessage>
+                  {formik.errors.vehicleModel}
+                  </ValidationMessage>
+              </Stack>
               </FormControl>
 
               <FormControl isRequired my="2">
-                <Stack mx="4">
+              <Stack mx="4">
                   <FormControl.Label>
-                    {i18n.t('::Vehicle:Plate')}
+                  {i18n.t('::Vehicle:RoadTaxExpiryDate')}
                   </FormControl.Label>
-                  <Input
-                    ref={vehiclePlateRef}
-                    onSubmitEditing={() => vehicleModelRef.current.focus()}
-                    returnKeyType="next"
-                    onChangeText={formik.handleChange('vehiclePlate')}
-                    onBlur={formik.handleBlur('vehiclePlate')}
-                    value={formik.values.vehiclePlate}
-                  />
+                  <Button 
+                  onPress={setShowRoadTaxDatePicker}>
+                    Select License Expiry Date
+                  </Button>
+                  <Text>{selectedRoadTaxDate.toDateString()} </Text>
+                  {showRoadTaxDatePicker && (
+                    <DateTimePicker
+                      value={selectedRoadTaxDate}
+                      mode="date"
+                      onChange={handleRoadTaxDateChange}
+                    />
+                  )}
                   <ValidationMessage>
-                    {formik.errors.vehiclePlate}
+                  {formik.errors.roadTaxExpiryDate}
                   </ValidationMessage>
-                </Stack>
+              </Stack>
               </FormControl>
 
-                <FormControl isRequired my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:Model')}
-                    </FormControl.Label>
-                    <Input
-                    ref={vehicleModelRef}
-                    returnKeyType="next"
-                    onChangeText={formik.handleChange('vehicleModel')}
-                    onBlur={formik.handleBlur('vehicleModel')}
-                    value={formik.values.vehicleModel}
-                    />
-                    <ValidationMessage>
-                    {formik.errors.vehicleModel}
-                    </ValidationMessage>
-                </Stack>
-                </FormControl>
+              <FormControl isRequired my="2">
+              <Stack mx="4">
+                  <FormControl.Label>
+                  {i18n.t('::Vehicle:ServiceDate')}
+                  </FormControl.Label>
+                  <Button 
+                  onPress={setShowServiceDatePicker}>
+                    Select Service Date
+                  </Button>
+                  <Text>{selectedServiceDate.toDateString()} </Text>
+                  {showServiceDatePicker && (
+                  <DateTimePicker
+                      value={selectedServiceDate}
+                      mode="date"
+                      onChange={handleServiceDateChange}
+                  />
+                  )}
+                  <ValidationMessage>
+                  {formik.errors.serviceDate}
+                  </ValidationMessage>
+              </Stack>
+              </FormControl>
 
-                <FormControl isRequired my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:RoadTaxExpiryDate')}
-                    </FormControl.Label>
-                    <Button 
-                    onPress={setShowRoadTaxDatePicker}>
-                      Select License Expiry Date
-                    </Button>
-                    <Text>{selectedRoadTaxDate.toDateString()} </Text>
-                    {showRoadTaxDatePicker && (
-                      <DateTimePicker
-                        value={selectedRoadTaxDate}
-                        mode="date"
-                        onChange={handleRoadTaxDateChange}
+              <FormControl isRequired my="2">
+              <Stack mx="4">
+                  <FormControl.Label>
+                  {i18n.t('::Vehicle:Status')}
+                  </FormControl.Label>
+                  <Select
+                  mode="dropdown"
+                  onValueChange={handleStatusChange}
+                  selectedValue={formik.values.status}
+                  placeHolder="::Vehicle:SelectStatus">
+                  {statuses.map(status => (
+                      <Select.Item
+                      label={i18n.t('::Vehicle:EnumStatus.' + status.value)}
+                      value={status.value}
+                      key={status.key}
                       />
-                    )}
-                    <ValidationMessage>
-                    {formik.errors.roadTaxExpiryDate}
-                    </ValidationMessage>
-                </Stack>
-                </FormControl>
+                  ))}
+                  </Select>
+                  <ValidationMessage>{formik.errors.status}</ValidationMessage>
+              </Stack>
+              </FormControl>
 
-                <FormControl isRequired my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:ServiceDate')}
-                    </FormControl.Label>
-                    <Button 
-                    onPress={setShowServiceDatePicker}>
-                      Select Service Date
-                    </Button>
-                    <Text>{selectedServiceDate.toDateString()} </Text>
-                    {showServiceDatePicker && (
-                    <DateTimePicker
-                        value={selectedServiceDate}
-                        mode="date"
-                        onChange={handleServiceDateChange}
-                    />
-                    )}
-                    <ValidationMessage>
-                    {formik.errors.serviceDate}
-                    </ValidationMessage>
-                </Stack>
-                </FormControl>
-
-                <FormControl isRequired my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:Status')}
-                    </FormControl.Label>
-                    <Select
-                    mode="dropdown"
-                    onValueChange={handleStatusChange}
-                    selectedValue={formik.values.status}
-                    placeHolder="::Vehicle:SelectStatus">
-                    {statuses.map(status => (
-                        <Select.Item
-                        label={i18n.t('::Vehicle:EnumStatus.' + status.value)}
-                        value={status.value}
-                        key={status.key}
-                        />
-                    ))}
-                    </Select>
-                    <ValidationMessage>{formik.errors.status}</ValidationMessage>
-                </Stack>
-                </FormControl>
-
-                <FormControl my="2">
-                <Stack mx="4">
-                    <FormControl.Label>
-                    {i18n.t('::Vehicle:Remark')}
-                    </FormControl.Label>
-                    <Input
-                    returnKeyType="next"
-                    onChangeText={formik.handleChange('remark')}
-                    onBlur={formik.handleBlur('remark')}
-                    value={formik.values.remark}
-                    />
-                </Stack>
-                </FormControl>
-            </>
-        </Box>
+              <FormControl my="2">
+              <Stack mx="4">
+                  <FormControl.Label>
+                  {i18n.t('::Vehicle:Remark')}
+                  </FormControl.Label>
+                  <Input
+                  returnKeyType="next"
+                  onChangeText={formik.handleChange('remark')}
+                  onBlur={formik.handleBlur('remark')}
+                  value={formik.values.remark}
+                  />
+              </Stack>
+              </FormControl>
+          </>
+      </Box>
         </ScrollView>
       </KeyboardAvoidingView>
       <FormButtons

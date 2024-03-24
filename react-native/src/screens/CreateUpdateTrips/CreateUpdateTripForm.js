@@ -62,7 +62,12 @@ function CreateUpdateTripForm({ editingTrip = {}, submit, remove }) {
         setVehicles(response.items);
     });
 
-    setSelectedDate(new Date(editingTrip.tripDate));
+    if (editingTrip.tripDate) {
+      setSelectedDate(new Date(editingTrip.tripDate));
+    }
+    else {
+      setSelectedDate(new Date());
+    }
   }, []);
 
   const TripType = {
@@ -156,7 +161,7 @@ function CreateUpdateTripForm({ editingTrip = {}, submit, remove }) {
     <>
       <KeyboardAvoidingView
         h={{
-          base: '800px',
+          base: '90%',
           lg: 'auto',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
