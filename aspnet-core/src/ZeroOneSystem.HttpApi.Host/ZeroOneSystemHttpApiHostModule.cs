@@ -50,7 +50,7 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
-        if (hostingEnvironment.IsStaging())
+        if (hostingEnvironment.IsProduction())
         {
             PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
             {
@@ -59,8 +59,7 @@ public class ZeroOneSystemHttpApiHostModule : AbpModule
 
             PreConfigure<OpenIddictServerBuilder>(builder =>
             {
-                builder.AddEphemeralEncryptionKey();
-                builder.AddEphemeralSigningKey();
+                builder.AddProductionEncryptionAndSigningCertificate("authserver.pfx", "85D2BC1B-EACA-4188-B542-9E043F59EA32");
             });
         }
 
