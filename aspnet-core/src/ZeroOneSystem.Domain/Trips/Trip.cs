@@ -63,6 +63,7 @@ namespace ZeroOneSystem.Trips
             ContactNo = contactNo;
             DriverId = driverId;
             VehicleId = vehicleId;
+            CreationTime = DateTime.Now;
         }
 
         public static Trip Create(
@@ -145,6 +146,7 @@ namespace ZeroOneSystem.Trips
             ContactNo = contactNo;
             DriverId = driverId;
             VehicleId = vehicleId;
+            LastModificationTime = DateTime.Now;
         }
     }
 }

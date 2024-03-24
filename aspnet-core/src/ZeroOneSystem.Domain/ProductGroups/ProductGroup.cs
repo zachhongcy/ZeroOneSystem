@@ -34,6 +34,7 @@ namespace ZeroOneSystem.ProductGroups
             Status = status;
             IsForSales = isForSales;
             Products = new Collection<Product>();
+            CreationTime = DateTime.Now;
         }
 
         public static ProductGroup CreateProductGroup(
@@ -63,6 +64,7 @@ namespace ZeroOneSystem.ProductGroups
             Description = Check.NotNullOrEmpty(description, nameof(description));
             Status = status;
             IsForSales = isForSales;
+            LastModificationTime = DateTime.Now;
         }
     }
 }

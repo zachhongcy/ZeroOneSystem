@@ -55,6 +55,7 @@ namespace ZeroOneSystem.Products
             Location = location;
             Owner = owner;
             ProductGroupId = productGroupId;
+            CreationTime = DateTime.Now;
         }
 
         public static Product Create(
@@ -124,6 +125,7 @@ namespace ZeroOneSystem.Products
             Location = Check.NotNullOrEmpty(location, nameof(location));
             Owner = Check.NotNullOrEmpty(owner, nameof(owner));
             ProductGroupId = productGroupId;
+            LastModificationTime = DateTime.Now;
         }
 
         public void SetProductSize(

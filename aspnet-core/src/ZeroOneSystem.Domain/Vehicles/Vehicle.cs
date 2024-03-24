@@ -42,6 +42,7 @@ namespace ZeroOneSystem.Vehicles
             ServiceDate = serviceDate;
             Status = status;
             Remark = remark;
+            CreationTime = DateTime.Now;
         }
 
         public static Vehicle Create(
@@ -88,6 +89,7 @@ namespace ZeroOneSystem.Vehicles
             ServiceDate = serviceDate;
             Status = status;
             Remark = remark;
+            LastModificationTime = DateTime.Now;
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ZeroOneSystem.ProductAdjustments
             DocumentDate = documentDate;
             Description = description;
             ProductAdjustmentItems = new Collection<ProductAdjustmentItem>();
+            CreationTime = DateTime.Now;
         }
 
         public static ProductAdjustment Create(
@@ -115,6 +116,8 @@ namespace ZeroOneSystem.ProductAdjustments
             productAdjustmentItem.Update(itemCode, description, uom, quantity, unitCost);
 
             ProductAdjustmentItems.Add(productAdjustmentItem);
+
+            LastModificationTime = DateTime.Now;
         }
     }
 }

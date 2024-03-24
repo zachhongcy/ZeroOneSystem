@@ -138,6 +138,7 @@ namespace ZeroOneSystem.Drivers
             EmergencyContactNo = Check.NotNullOrEmpty(emergencyContactNo, nameof(emergencyContactNo));
             Address = Check.NotNullOrEmpty(address, nameof(address));
             ImageFileName = imageFileName;
+            LastModificationTime = DateTime.Now;
         }
     }
 }
