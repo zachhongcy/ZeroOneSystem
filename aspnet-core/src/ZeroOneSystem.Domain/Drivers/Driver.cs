@@ -61,6 +61,7 @@ namespace ZeroOneSystem.Drivers
             Address = address;
             Trips = new Collection<Trip>();
             ImageFileName = imageFileName;
+            CreationTime = DateTime.Now;
         }
 
         public static Driver Create(

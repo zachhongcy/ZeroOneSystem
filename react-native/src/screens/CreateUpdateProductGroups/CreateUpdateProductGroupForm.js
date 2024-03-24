@@ -21,6 +21,7 @@ import { mapEnumToOptions } from '../../utils/FormUtils';
 const validations = {
   name: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
   shortCode: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
+  description: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
   status: Yup.string().required('AbpAccount::ThisFieldIsRequired.'),
 };
 
@@ -112,7 +113,7 @@ function CreateUpdateProductGroupForm({ editingProductGroup = {}, submit, remove
                 </Stack>
               </FormControl>
 
-              <FormControl my="2">
+              <FormControl isRequired my="2">
                 <Stack mx="4">
                   <FormControl.Label>
                     {i18n.t('::ProductGroup:Description')}
@@ -125,6 +126,9 @@ function CreateUpdateProductGroupForm({ editingProductGroup = {}, submit, remove
                     value={formik.values.description}
                   />
                 </Stack>
+                  <ValidationMessage>
+                    {formik.errors.description}
+                  </ValidationMessage>
               </FormControl>
 
               <FormControl isRequired my="2">

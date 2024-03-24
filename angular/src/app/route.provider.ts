@@ -39,7 +39,7 @@ function configureRoutes(routesService: RoutesService) {
       {
         path: '/trips',
         name: '::Menu:Trips',
-        iconClass: 'fas fa-cart-arrow-down',
+        iconClass: 'fas fa-road',
         order: 5,
         layout: eLayoutType.application,
       },

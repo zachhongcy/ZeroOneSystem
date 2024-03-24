@@ -12,7 +12,7 @@
                     <label for="name" class="form-label">
                         {{ '::ProductGroup:Name' | abpLocalization }}
                     </label>
-                    <span> * </span>
+                    <span class="text-danger"> * </span>
                 </div>
                 <div class="col-md-10">
                     <input type="text" id="name" class="form-control" formControlName="name" />
@@ -24,7 +24,7 @@
                     <label for="short-code" class="form-label">
                         {{ '::ProductGroup:ShortCode' | abpLocalization }}
                     </label>
-                    <span> * </span>
+                    <span class="text-danger"> * </span>
                 </div>
                 <div class="col-md-10">
                     <input type="text" id="short-code" class="form-control" formControlName="shortCode" />
@@ -36,7 +36,7 @@
                     <label for="description" class="form-label">
                         {{ '::ProductGroup:Description' | abpLocalization }}
                     </label>
-                    <span> * </span>
+                    <span class="text-danger"> * </span>
                 </div>
                 <div class="col-md-10">
                     <input type="text" id="description" class="form-control" formControlName="description" />
@@ -48,7 +48,7 @@
                     <label for="status" class="form-label">
                         {{ '::ProductGroup:Status' | abpLocalization }}
                     </label>
-                    <span> * </span>
+                    <span class="text-danger"> * </span>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control" id="status" formControlName="status">

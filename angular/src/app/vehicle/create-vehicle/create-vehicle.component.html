@@ -11,7 +11,7 @@
                 <label for="vehicle-type" class="form-label">
                     {{ '::Vehicle:Type' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <select class="form-control" id="vehicle-type" formControlName="vehicleType">
@@ -31,14 +31,14 @@
                 <div class="col-md-6">
                     <img [src]="imageUrl" class="img-fluid" *ngIf="imageUrl" alt="Selected Image">
                 </div>
-                <input type="file" id="picture" class="form-control" formControlName="image" (change)="addImageToForm($event)" />
+                <input type="file" accept="image/*" id="picture" class="form-control" formControlName="image" (change)="addImageToForm($event)" />
             </div>
             
             <div class="col-md-2">
                 <label for="vehicle-plate" class="form-label">
                     {{ '::Vehicle:Plate' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="vehicle-plate" class="form-control" formControlName="vehiclePlate" />
@@ -48,7 +48,7 @@
                 <label for="vehicle-model" class="form-label">
                     {{ '::Vehicle:Model' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="vehicle-model" class="form-control" formControlName="vehicleModel" />
@@ -58,7 +58,7 @@
                 <label class="form-label">
                     {{ '::Vehicle:RoadTaxExpiryDate' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input
@@ -73,7 +73,7 @@
                 <label class="form-label">
                     {{ '::Vehicle:ServiceDate' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input
@@ -88,7 +88,7 @@
                 <label for="status" class="form-label">
                     {{ '::Vehicle:Status' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <select class="form-control" id="status" formControlName="status">

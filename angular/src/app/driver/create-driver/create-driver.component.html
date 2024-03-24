@@ -26,6 +26,7 @@
                     <img [src]="imageUrl" class="img-fluid" *ngIf="imageUrl" alt="Selected Image">
                 </div>
                 <input type="file" 
+                    accept="image/*" 
                     id="picture" 
                     class="form-control" 
                     formControlName="image" 
@@ -36,7 +37,7 @@
                 <label for="name" class="form-label">
                     {{ '::Driver:Name' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="name" class="form-control" formControlName="driverName" />
@@ -46,7 +47,7 @@
                 <label for="license-no" class="form-label">
                     {{ '::Driver:LicenseNo' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="license-no" class="form-control" formControlName="licenseNo" />
@@ -56,7 +57,7 @@
                 <label class="form-label">
                     {{ '::Driver:LicenseExpiryDate' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input
@@ -71,7 +72,7 @@
                 <label for="contact-no" class="form-label">
                     {{ '::Driver:ContactNo' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="contact-no" class="form-control" formControlName="contactNo" />
@@ -81,7 +82,7 @@
                 <label for="employee-category" class="form-label">
                     {{ '::Driver:EmployeeCategory' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="number" id="employee-category" class="form-control" formControlName="employeeCategory" />
@@ -91,7 +92,7 @@
                 <label for="password" class="form-label">
                     {{ '::Driver:Password' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="password" class="form-control" formControlName="password" />
@@ -101,7 +102,7 @@
                 <label for="status" class="form-label">
                     {{ '::Driver:Status' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <select class="form-control" id="status" formControlName="status">
@@ -125,7 +126,7 @@
                 <label for="emergency-contact-name" class="form-label">
                     {{ '::Driver:EmergencyContactName' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="emergency-contact-name" class="form-control" formControlName="emergencyContactName" />
@@ -135,7 +136,7 @@
                 <label for="relationship" class="form-label">
                     {{ '::Driver:Relationship' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="relationship" class="form-control" formControlName="emergencyRelationship" />
@@ -145,7 +146,7 @@
                 <label for="emergency-contact-no" class="form-label">
                     {{ '::Driver:EmergencyContactNo' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="emergency-contact-no" class="form-control" formControlName="emergencyContactNo" />
@@ -155,7 +156,7 @@
                 <label for="address" class="form-label">
                     {{ '::Driver:Address' | abpLocalization }}
                 </label>
-                <span> * </span>
+                <span class="text-danger"> * </span>
             </div>
             <div class="col-md-4">
                 <input type="text" id="address" class="form-control" formControlName="address" />

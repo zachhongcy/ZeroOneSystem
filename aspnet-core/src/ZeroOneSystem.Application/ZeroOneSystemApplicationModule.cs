@@ -50,7 +50,7 @@ namespace ZeroOneSystem;
                     }
                     else
                     {
-                        fs.BasePath = "\\ZeroOneSystem";
+                        fs.BasePath = "ZeroOneSystem";
                     }
                 });
             });

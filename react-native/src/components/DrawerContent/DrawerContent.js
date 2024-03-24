@@ -32,7 +32,7 @@ const screens = {
   },
   TripsStack: {
     label: '::Trips',
-    iconName: 'cart-arrow-down',
+    iconName: 'road',
     requiredPolicy: 'AbpIdentity.Users',
   },
   VehiclesStack: {

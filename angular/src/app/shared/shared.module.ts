@@ -20,9 +20,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
+  
+    FooterComponent
   ],
   imports: [
     CoreModule,
